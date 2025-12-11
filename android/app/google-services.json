@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "599730867609",
+    "project_id": "arif-mart-d7ad4",
+    "storage_bucket": "arif-mart-d7ad4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:599730867609:android:e7c511c7952e693a5dd708",
+        "android_client_info": {
+          "package_name": "com.arif_mart.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUEJSzTEbE_7AA4Y-UOJ6cp2Z3hXMniKc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

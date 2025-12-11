@@ -1,0 +1,74 @@
+# ------------------------------
+# Flutter & Dart default ignores
+# ------------------------------
+
+# Files and directories created by pub
+.dart_tool/
+.packages
+build/
+pubspec.lock
+
+# Directory created by dartdoc
+doc/api/
+
+# dotenv environment variables file
+.env*
+*.env
+
+# Avoid committing generated Javascript files:
+*.dart.js
+*.info.json
+*.js
+*.js_
+*.js.deps
+*.js.map
+
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# iOS & Android build folders
+android/.gradle/
+android/app/build/
+ios/Pods/
+ios/.symlinks/
+ios/build/
+
+# Xcode files
+*/xcuserdata/
+*/DerivedData/
+*.xcworkspace
+Runner.xcodeproj/project.xcworkspace/
+
+# IntelliJ / VS Code
+.idea/
+.vscode/
+
+# ------------------------------
+# 🔐 Sensitive Files (CUSTOM)
+# ------------------------------
+
+# JK's file
+JKs-file/
+JKs/
+JK_file/
+jks/
+*.jks
+
+# Android signing / keystore
+*.keystore
+*.key
+*.pem
+
+# Passwords & secrets
+password.txt
+secret/
+keys/
+private/
+credentials/
+config/
+*.p12
+
+# Backup files
+*.bak
+
+*.old
