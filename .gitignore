@@ -69,6 +69,5 @@ config/
 *.p12
 
 # Backup files
-*.bak
-
+*.baka
 *.old
