@@ -45,10 +45,7 @@ class ProductDetailScreen extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             'Loading product details...',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey[600],
-            ),
+            style: TextStyle(fontSize: 16, color: Colors.grey[600]),
           ),
         ],
       ),
@@ -62,11 +59,7 @@ class ProductDetailScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.error_outline,
-              size: 64,
-              color: Colors.red[400],
-            ),
+            Icon(Icons.error_outline, size: 64, color: Colors.red[400]),
             const SizedBox(height: 16),
             Text(
               'Failed to Load Product',
@@ -80,10 +73,7 @@ class ProductDetailScreen extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               controller.errorMessage.value,
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[600],
-              ),
+              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
@@ -105,10 +95,7 @@ class ProductDetailScreen extends StatelessWidget {
     return const Center(
       child: Text(
         'Product not found',
-        style: TextStyle(
-          fontSize: 18,
-          color: Colors.grey,
-        ),
+        style: TextStyle(fontSize: 18, color: Colors.grey),
       ),
     );
   }
@@ -120,121 +107,122 @@ class ProductDetailScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       body: CustomScrollView(
         slivers: [
-        // App Bar
-        SliverAppBar(
-          expandedHeight: 0,
-          floating: true,
-          pinned: true,
-          backgroundColor: AppColors.primaryColor,
-          foregroundColor: Colors.white,
-          elevation: 0,
-          centerTitle: false,
-          titleSpacing: 16,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () {
-              controller.handleBackNavigation();
-            },
-            tooltip: 'Back to Home',
-          ),
-          title: Text(
-            product.name ?? 'Product',
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
+          // App Bar
+          SliverAppBar(
+            expandedHeight: 0,
+            floating: true,
+            pinned: true,
+            backgroundColor: AppColors.primaryColor,
+            foregroundColor: Colors.white,
+            elevation: 0,
+            centerTitle: false,
+            titleSpacing: 16,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () {
+                controller.handleBackNavigation();
+              },
+              tooltip: 'Back to Home',
             ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          actions: [
-            // Share button (only show if affiliate program is enabled)
-            if (product.affiliateProgram?.isEnabled == true)
-              IconButton(
-                icon: const Icon(Icons.share, color: Colors.white),
-                onPressed: () {
-                  controller.shareProduct();
-                },
-                tooltip: 'Share & Earn ${product.affiliateProgram?.formattedRate ?? '0%'}',
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                constraints: const BoxConstraints(
-                  minWidth: 40,
-                  minHeight: 40,
-                ),
+            title: Text(
+              product.name ?? 'Product',
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
               ),
-            // Wishlist heart icon
-            Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child: ProductDetailHeartIcon(productId: product.id ?? ''),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
-          ],
-        ),
-
-        // Content
-        SliverToBoxAdapter(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Product Images
-              _buildImageGallery(controller),
-
-              // Deep Link Indicator (if user came from deep link)
-              _buildDeepLinkIndicator(controller),
-
-              // Product Info
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Product Name & Flash Sale
-                    _buildProductHeader(product),
-
-                    const SizedBox(height: 16),
-
-                    // Price Section
-                    Obx(() => _buildPriceSection(controller)),
-
-                    const SizedBox(height: 24),
-
-                    // Product Description
-                    _buildDescription(product),
-
-                    const SizedBox(height: 24),
-
-                    // Product Details (Brand, Category, etc.)
-                    _buildProductDetails(product),
-
-                    const SizedBox(height: 24),
-
-                    // Product Attributes (current viewing)
-                    Obx(() => _buildCurrentAttributes(controller)),
-
-                    const SizedBox(height: 24),
-
-                    // Delivery Info
-                    _buildDeliveryInfo(product),
-
-                    const SizedBox(height: 24),
-
-                    // Affiliate Program Card (only show if enabled)
-                    if (product.affiliateProgram?.isEnabled == true)
-                      _buildAffiliateProgramCard(controller, product),
-
-                    if (product.affiliateProgram?.isEnabled == true)
-                      const SizedBox(height: 24),
-
-                    // Variant Cards (replacing reviews)
-                    Obx(() => _buildVariantCards(controller)),
-
-                    const SizedBox(height: 100), // Space for bottom bar
-                  ],
+            actions: [
+              // Share button (only show if affiliate program is enabled)
+              if (product.affiliateProgram.isEnabled == true)
+                IconButton(
+                  icon: const Icon(Icons.share, color: Colors.white),
+                  onPressed: () {
+                    controller.shareProduct();
+                  },
+                  tooltip:
+                      'Share & Earn ${product.affiliateProgram.formattedRate ?? '0%'}',
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  constraints: const BoxConstraints(
+                    minWidth: 40,
+                    minHeight: 40,
+                  ),
                 ),
+              // Wishlist heart icon
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: ProductDetailHeartIcon(productId: product.id ?? ''),
               ),
             ],
           ),
-        ),
-      ],
+
+          // Content
+          SliverToBoxAdapter(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Product Images
+                _buildImageGallery(controller),
+
+                // Deep Link Indicator (if user came from deep link)
+                _buildDeepLinkIndicator(controller),
+
+                // Product Info
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Product Name & Flash Sale
+                      _buildProductHeader(product),
+
+                      const SizedBox(height: 16),
+
+                      // Price Section
+                      Obx(() => _buildPriceSection(controller)),
+
+                      const SizedBox(height: 24),
+
+                      // Product Description
+                      _buildDescription(product),
+
+                      const SizedBox(height: 24),
+
+                      // Product Details (Brand, Category, etc.)
+                      _buildProductDetails(product),
+
+                      const SizedBox(height: 24),
+
+                      // Product Attributes (current viewing)
+                      Obx(() => _buildCurrentAttributes(controller)),
+
+                      const SizedBox(height: 24),
+
+                      // Delivery Info
+                      _buildDeliveryInfo(product),
+
+                      const SizedBox(height: 24),
+
+                      // Affiliate Program Card (only show if enabled)
+                      if (product.affiliateProgram.isEnabled == true)
+                        _buildAffiliateProgramCard(controller, product),
+
+                      if (product.affiliateProgram.isEnabled == true)
+                        const SizedBox(height: 24),
+
+                      // Variant Cards (replacing reviews)
+                      Obx(() => _buildVariantCards(controller)),
+
+                      const SizedBox(height: 100), // Space for bottom bar
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: ProductBottomBar(controller: controller),
     );
@@ -252,17 +240,11 @@ class ProductDetailScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                Icons.image,
-                size: 64,
-                color: Colors.grey[400],
-              ),
+              Icon(Icons.image, size: 64, color: Colors.grey[400]),
               const SizedBox(height: 8),
               Text(
                 'No images available',
-                style: TextStyle(
-                  color: Colors.grey[600],
-                ),
+                style: TextStyle(color: Colors.grey[600]),
               ),
             ],
           ),
@@ -282,7 +264,7 @@ class ProductDetailScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               final image = images[index];
               String imageUrl;
-              
+
               // Handle both product pictures and variant images
               if (image is ProductPicture) {
                 imageUrl = image.fullImageUrl;
@@ -291,7 +273,7 @@ class ProductDetailScreen extends StatelessWidget {
               } else {
                 imageUrl = '';
               }
-              
+
               return Container(
                 color: Colors.grey[50],
                 child: Image.network(
@@ -314,9 +296,7 @@ class ProductDetailScreen extends StatelessWidget {
                             const SizedBox(height: 8),
                             Text(
                               'Image not available',
-                              style: TextStyle(
-                                color: Colors.grey[600],
-                              ),
+                              style: TextStyle(color: Colors.grey[600]),
                             ),
                           ],
                         ),
@@ -329,11 +309,14 @@ class ProductDetailScreen extends StatelessWidget {
                       color: Colors.grey[100],
                       child: Center(
                         child: CircularProgressIndicator(
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                                  loadingProgress.expectedTotalBytes!
-                              : null,
-                          valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryColor),
+                          value:
+                              loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                      loadingProgress.expectedTotalBytes!
+                                  : null,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            AppColors.primaryColor,
+                          ),
                         ),
                       ),
                     );
@@ -375,21 +358,57 @@ class ProductDetailScreen extends StatelessWidget {
             ),
           ),
 
-        // Flash Sale Timer
-        if (product.flashSale.isCurrentlyActive)
-          Positioned(
-            top: 16,
-            right: 16,
-            child: FlashSaleTimer(
-              flashSale: product.flashSale,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 10,
-                fontWeight: FontWeight.w600,
+        Positioned(
+          top: 16,
+          right: 16,
+          child: Column(
+            children: [
+              // Flash Sale Timer
+              if (product.flashSale.isCurrentlyActive)
+                FlashSaleTimer(
+                  flashSale: product.flashSale,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  backgroundColor: Colors.black.withOpacity(0.7),
+                ),
+
+              // Download button
+              GestureDetector(
+                onTap: () {
+                  final currentIndex = controller.currentImageIndex.value;
+                  final image = images[currentIndex];
+                  String imageUrl;
+
+                  if (image is ProductPicture) {
+                    imageUrl = image.fullImageUrl;
+                  } else if (image is VariantImage) {
+                    imageUrl = image.fullImageUrl;
+                  } else {
+                    imageUrl = '';
+                  }
+
+                  if (imageUrl.isEmpty) {
+                    return;
+                  }
+
+                  controller.downloadImage(imageUrl, currentIndex);
+                },
+                child: Container(
+                  margin: const EdgeInsets.only(top: 12),
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.withOpacity(0.7),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(Icons.download, color: Colors.white, size: 24),
+                ),
               ),
-              backgroundColor: Colors.black.withOpacity(0.7),
-            ),
+            ],
           ),
+        ),
 
         // Image indicators (if multiple images)
         if (images.length > 1)
@@ -397,23 +416,26 @@ class ProductDetailScreen extends StatelessWidget {
             bottom: 16,
             left: 0,
             right: 0,
-            child: Obx(() => Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(
-                    images.length,
-                    (index) => Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 3),
-                      width: controller.currentImageIndex.value == index ? 24 : 8,
-                      height: 8,
-                      decoration: BoxDecoration(
-                        color: controller.currentImageIndex.value == index
-                            ? AppColors.primaryColor
-                            : Colors.white.withOpacity(0.5),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
+            child: Obx(
+              () => Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  images.length,
+                  (index) => Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 3),
+                    width: controller.currentImageIndex.value == index ? 24 : 8,
+                    height: 8,
+                    decoration: BoxDecoration(
+                      color:
+                          controller.currentImageIndex.value == index
+                              ? AppColors.primaryColor
+                              : Colors.white.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(4),
                     ),
                   ),
-                )),
+                ),
+              ),
+            ),
           ),
 
         // Thumbnail strip (if multiple images)
@@ -430,50 +452,55 @@ class ProductDetailScreen extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final image = images[index];
                   String thumbnailUrl;
-                  
+
                   // Handle both product pictures and variant images
                   if (image is ProductPicture) {
                     thumbnailUrl = image.fullThumbnailUrl;
                   } else if (image is VariantImage) {
-                    thumbnailUrl = image.fullImageUrl; // Variants don't have separate thumbnails
+                    thumbnailUrl =
+                        image
+                            .fullImageUrl; // Variants don't have separate thumbnails
                   } else {
                     thumbnailUrl = '';
                   }
-                  
-                  return Obx(() => GestureDetector(
-                        onTap: () => controller.goToImage(index),
-                        child: Container(
-                          width: 60,
-                          height: 60,
-                          margin: const EdgeInsets.only(right: 8),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: controller.currentImageIndex.value == index
-                                  ? AppColors.primaryColor
-                                  : Colors.grey[300]!,
-                              width: 2,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
+
+                  return Obx(
+                    () => GestureDetector(
+                      onTap: () => controller.goToImage(index),
+                      child: Container(
+                        width: 60,
+                        height: 60,
+                        margin: const EdgeInsets.only(right: 8),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color:
+                                controller.currentImageIndex.value == index
+                                    ? AppColors.primaryColor
+                                    : Colors.grey[300]!,
+                            width: 2,
                           ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(6),
-                            child: Image.network(
-                              thumbnailUrl,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Container(
-                                  color: Colors.grey[200],
-                                  child: Icon(
-                                    Icons.image,
-                                    color: Colors.grey[400],
-                                    size: 20,
-                                  ),
-                                );
-                              },
-                            ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(6),
+                          child: Image.network(
+                            thumbnailUrl,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Container(
+                                color: Colors.grey[200],
+                                child: Icon(
+                                  Icons.image,
+                                  color: Colors.grey[400],
+                                  size: 20,
+                                ),
+                              );
+                            },
                           ),
                         ),
-                      ));
+                      ),
+                    ),
+                  );
                 },
               ),
             ),
@@ -527,9 +554,10 @@ class ProductDetailScreen extends StatelessWidget {
               return Icon(
                 Icons.star,
                 size: 16,
-                color: index < product.rating.filledStars
-                    ? Colors.amber
-                    : Colors.grey[300],
+                color:
+                    index < product.rating.filledStars
+                        ? Colors.amber
+                        : Colors.grey[300],
               );
             }),
             const SizedBox(width: 8),
@@ -546,10 +574,7 @@ class ProductDetailScreen extends StatelessWidget {
               Flexible(
                 child: Text(
                   '(${product.rating.count} reviews)',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey[500],
-                  ),
+                  style: TextStyle(fontSize: 14, color: Colors.grey[500]),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -573,9 +598,12 @@ class ProductDetailScreen extends StatelessWidget {
               style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
-                color: controller.selectedVariant.value != null 
-                    ? AppColors.primaryColor 
-                    : (product.flashSale.isCurrentlyActive ? Colors.red : AppColors.primaryColor),
+                color:
+                    controller.selectedVariant.value != null
+                        ? AppColors.primaryColor
+                        : (product.flashSale.isCurrentlyActive
+                            ? Colors.red
+                            : AppColors.primaryColor),
               ),
             ),
             if (product.flashSale.isCurrentlyActive) ...[
@@ -634,22 +662,26 @@ class ProductDetailScreen extends StatelessWidget {
                   : 'Out of Stock',
               style: TextStyle(
                 fontSize: 14,
-                color: controller.isInStock ? Colors.green[700] : Colors.red[700],
+                color:
+                    controller.isInStock ? Colors.green[700] : Colors.red[700],
                 fontWeight: FontWeight.w500,
               ),
             ),
           ],
         ),
-        
+
         // Variant Selection Indicator
-        if (controller.isViewingVariant.value && controller.selectedVariant.value != null) ...[
+        if (controller.isViewingVariant.value &&
+            controller.selectedVariant.value != null) ...[
           const SizedBox(height: 8),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
               color: AppColors.primaryColor.withOpacity(0.1),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: AppColors.primaryColor.withOpacity(0.3)),
+              border: Border.all(
+                color: AppColors.primaryColor.withOpacity(0.3),
+              ),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -691,11 +723,7 @@ class ProductDetailScreen extends StatelessWidget {
         const SizedBox(height: 8),
         Text(
           product.description,
-          style: TextStyle(
-            fontSize: 14,
-            color: Colors.grey[700],
-            height: 1.5,
-          ),
+          style: TextStyle(fontSize: 14, color: Colors.grey[700], height: 1.5),
         ),
       ],
     );
@@ -746,17 +774,13 @@ class ProductDetailScreen extends StatelessWidget {
           Expanded(
             child: Text(
               value,
-              style: const TextStyle(
-                fontSize: 14,
-                color: Colors.black87,
-              ),
+              style: const TextStyle(fontSize: 14, color: Colors.black87),
             ),
           ),
         ],
       ),
     );
   }
-
 
   Widget _buildDeliveryInfo(product) {
     return Container(
@@ -771,11 +795,7 @@ class ProductDetailScreen extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(
-                Icons.local_shipping,
-                color: Colors.blue[600],
-                size: 20,
-              ),
+              Icon(Icons.local_shipping, color: Colors.blue[600], size: 20),
               const SizedBox(width: 8),
               Text(
                 'Delivery Information',
@@ -790,36 +810,22 @@ class ProductDetailScreen extends StatelessWidget {
           const SizedBox(height: 12),
           Row(
             children: [
-              Icon(
-                Icons.location_city,
-                color: Colors.blue[600],
-                size: 16,
-              ),
+              Icon(Icons.location_city, color: Colors.blue[600], size: 16),
               const SizedBox(width: 8),
               Text(
                 'Inside City: ৳${product.deliveryCost.insideCity}',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.blue[700],
-                ),
+                style: TextStyle(fontSize: 14, color: Colors.blue[700]),
               ),
             ],
           ),
           const SizedBox(height: 4),
           Row(
             children: [
-              Icon(
-                Icons.location_on,
-                color: Colors.blue[600],
-                size: 16,
-              ),
+              Icon(Icons.location_on, color: Colors.blue[600], size: 16),
               const SizedBox(width: 8),
               Text(
                 'Outside City: ৳${product.deliveryCost.outsideCity}',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.blue[700],
-                ),
+                style: TextStyle(fontSize: 14, color: Colors.blue[700]),
               ),
             ],
           ),
@@ -831,11 +837,11 @@ class ProductDetailScreen extends StatelessWidget {
   // Current attributes display
   Widget _buildCurrentAttributes(ProductDetailController controller) {
     final attributes = controller.currentAttributes;
-    
+
     if (attributes.isEmpty) {
       return const SizedBox.shrink();
     }
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -902,7 +908,7 @@ class ProductDetailScreen extends StatelessWidget {
               ],
             ),
           );
-        }).toList(),
+        }),
       ],
     );
   }
@@ -912,7 +918,7 @@ class ProductDetailScreen extends StatelessWidget {
     if (controller.isLoadingVariants.value) {
       return _buildVariantsLoading();
     }
-    
+
     if (!controller.hasVariants) {
       return const SizedBox.shrink();
     }
@@ -965,8 +971,9 @@ class ProductDetailScreen extends StatelessWidget {
           itemCount: controller.variants.length,
           itemBuilder: (context, index) {
             final variant = controller.variants[index];
-            final isSelected = controller.selectedVariant.value?.id == variant.id;
-            
+            final isSelected =
+                controller.selectedVariant.value?.id == variant.id;
+
             return _buildVariantCard(controller, variant, isSelected);
           },
         ),
@@ -996,10 +1003,7 @@ class ProductDetailScreen extends StatelessWidget {
           const SizedBox(width: 12),
           Text(
             'Loading variants...',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey[600],
-            ),
+            style: TextStyle(fontSize: 14, color: Colors.grey[600]),
           ),
         ],
       ),
@@ -1009,20 +1013,22 @@ class ProductDetailScreen extends StatelessWidget {
   // Original product card
   Widget _buildOriginalProductCard(ProductDetailController controller) {
     final product = controller.product.value!;
-    
+
     return GestureDetector(
       onTap: () => controller.selectVariant(null),
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: !controller.isViewingVariant.value 
-              ? AppColors.primaryColor.withOpacity(0.1)
-              : Colors.white,
+          color:
+              !controller.isViewingVariant.value
+                  ? AppColors.primaryColor.withOpacity(0.1)
+                  : Colors.white,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: !controller.isViewingVariant.value 
-                ? AppColors.primaryColor
-                : Colors.grey[300]!,
+            color:
+                !controller.isViewingVariant.value
+                    ? AppColors.primaryColor
+                    : Colors.grey[300]!,
             width: 2,
           ),
         ),
@@ -1041,17 +1047,14 @@ class ProductDetailScreen extends StatelessWidget {
                     width: 60,
                     height: 60,
                     color: Colors.grey[200],
-                    child: Icon(
-                      Icons.image,
-                      color: Colors.grey[400],
-                    ),
+                    child: Icon(Icons.image, color: Colors.grey[400]),
                   );
                 },
               ),
             ),
-            
+
             const SizedBox(width: 12),
-            
+
             // Product info
             Expanded(
               child: Column(
@@ -1076,9 +1079,9 @@ class ProductDetailScreen extends StatelessWidget {
                         ),
                     ],
                   ),
-                  
+
                   const SizedBox(height: 4),
-                  
+
                   Text(
                     product.name,
                     style: const TextStyle(
@@ -1088,12 +1091,12 @@ class ProductDetailScreen extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  
+
                   const SizedBox(height: 4),
-                  
+
                   Row(
                     children: [
-                      if (product.flashSale.isCurrentlyActive && 
+                      if (product.flashSale.isCurrentlyActive &&
                           product.flashSale.discountPrice != null) ...[
                         Text(
                           '৳${product.flashSale.discountPrice!.toStringAsFixed(0)}',
@@ -1119,15 +1122,12 @@ class ProductDetailScreen extends StatelessWidget {
                           ),
                         ),
                       ],
-                      
+
                       const Spacer(),
-                      
+
                       Text(
                         '${product.quantity} left',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey[600],
-                        ),
+                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                       ),
                     ],
                   ),
@@ -1141,7 +1141,10 @@ class ProductDetailScreen extends StatelessWidget {
   }
 
   // Affiliate Program Card
-  Widget _buildAffiliateProgramCard(ProductDetailController controller, ProductData product) {
+  Widget _buildAffiliateProgramCard(
+    ProductDetailController controller,
+    ProductData product,
+  ) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -1211,10 +1214,7 @@ class ProductDetailScreen extends StatelessWidget {
                   children: [
                     Text(
                       'Commission Rate',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey[600],
-                      ),
+                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                     ),
                     Text(
                       product.affiliateProgram.formattedRate,
@@ -1233,10 +1233,7 @@ class ProductDetailScreen extends StatelessWidget {
                   children: [
                     Text(
                       'You Earn',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey[600],
-                      ),
+                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                     ),
                     Text(
                       product.formattedCashbackAmount,
@@ -1266,9 +1263,7 @@ class ProductDetailScreen extends StatelessWidget {
               icon: const Icon(Icons.share, size: 18),
               label: const Text(
                 'Share & Earn',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                ),
+                style: TextStyle(fontWeight: FontWeight.w600),
               ),
             ),
           ),
@@ -1278,19 +1273,22 @@ class ProductDetailScreen extends StatelessWidget {
   }
 
   // Individual variant card
-  Widget _buildVariantCard(ProductDetailController controller, ProductVariant variant, bool isSelected) {
+  Widget _buildVariantCard(
+    ProductDetailController controller,
+    ProductVariant variant,
+    bool isSelected,
+  ) {
     return GestureDetector(
       onTap: () => controller.selectVariant(variant),
       child: Container(
         decoration: BoxDecoration(
-          color: isSelected 
-              ? AppColors.primaryColor.withOpacity(0.1)
-              : Colors.white,
+          color:
+              isSelected
+                  ? AppColors.primaryColor.withOpacity(0.1)
+                  : Colors.white,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isSelected 
-                ? AppColors.primaryColor
-                : Colors.grey[300]!,
+            color: isSelected ? AppColors.primaryColor : Colors.grey[300]!,
             width: 2,
           ),
           boxShadow: [
@@ -1311,38 +1309,41 @@ class ProductDetailScreen extends StatelessWidget {
               child: Stack(
                 children: [
                   ClipRRect(
-                    borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
-                    child: variant.images.isNotEmpty
-                        ? Image.network(
-                            variant.images.first.fullImageUrl,
-                            width: double.infinity,
-                            height: double.infinity,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Container(
-                                color: Colors.grey[200],
-                                child: Center(
-                                  child: Icon(
-                                    Icons.image,
-                                    color: Colors.grey[400],
-                                    size: 24, // Smaller icon
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(10),
+                    ),
+                    child:
+                        variant.images.isNotEmpty
+                            ? Image.network(
+                              variant.images.first.fullImageUrl,
+                              width: double.infinity,
+                              height: double.infinity,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Container(
+                                  color: Colors.grey[200],
+                                  child: Center(
+                                    child: Icon(
+                                      Icons.image,
+                                      color: Colors.grey[400],
+                                      size: 24, // Smaller icon
+                                    ),
                                   ),
+                                );
+                              },
+                            )
+                            : Container(
+                              color: Colors.grey[200],
+                              child: Center(
+                                child: Icon(
+                                  Icons.image,
+                                  color: Colors.grey[400],
+                                  size: 24, // Smaller icon
                                 ),
-                              );
-                            },
-                          )
-                        : Container(
-                            color: Colors.grey[200],
-                            child: Center(
-                              child: Icon(
-                                Icons.image,
-                                color: Colors.grey[400],
-                                size: 24, // Smaller icon
                               ),
                             ),
-                          ),
                   ),
-                  
+
                   // Selection indicator
                   if (isSelected)
                     Positioned(
@@ -1364,7 +1365,7 @@ class ProductDetailScreen extends StatelessWidget {
                 ],
               ),
             ),
-            
+
             // Variant info
             Expanded(
               flex: 4, // Increased flex for content area
@@ -1376,36 +1377,42 @@ class ProductDetailScreen extends StatelessWidget {
                   children: [
                     // Attributes (show only most important ones)
                     if (variant.attributes.isNotEmpty) ...[
-                      Flexible( // Use Flexible instead of fixed height
+                      Flexible(
+                        // Use Flexible instead of fixed height
                         child: SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Row(
-                            children: variant.attributes.entries.take(2).map((entry) {
-                              return Container(
-                                margin: const EdgeInsets.only(right: 4),
-                                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[100],
-                                  borderRadius: BorderRadius.circular(3),
-                                ),
-                                child: Text(
-                                  '${entry.value}', // Show only value, not key
-                                  style: const TextStyle(
-                                    fontSize: 9, // Smaller font
-                                    color: Colors.black87,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              );
-                            }).toList(),
+                            children:
+                                variant.attributes.entries.take(2).map((entry) {
+                                  return Container(
+                                    margin: const EdgeInsets.only(right: 4),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 4,
+                                      vertical: 1,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[100],
+                                      borderRadius: BorderRadius.circular(3),
+                                    ),
+                                    child: Text(
+                                      '${entry.value}', // Show only value, not key
+                                      style: const TextStyle(
+                                        fontSize: 9, // Smaller font
+                                        color: Colors.black87,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
                           ),
                         ),
                       ),
                       const SizedBox(height: 3), // Reduced spacing
                     ],
-                    
+
                     // Price and stock
-                    Flexible( // Use Flexible for price section
+                    Flexible(
+                      // Use Flexible for price section
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.end,
@@ -1444,8 +1451,8 @@ class ProductDetailScreen extends StatelessWidget {
   // Build deep link indicator banner
   Widget _buildDeepLinkIndicator(ProductDetailController controller) {
     // Check if user came from deep link (no previous route)
-    final cameFromDeepLink = Get.previousRoute == null || Get.previousRoute == '';
-    
+    final cameFromDeepLink = Get.previousRoute == '';
+
     if (!cameFromDeepLink) {
       return const SizedBox.shrink(); // Don't show if not from deep link
     }
@@ -1469,11 +1476,7 @@ class ProductDetailScreen extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(
-              Icons.link,
-              color: AppColors.primaryColor,
-              size: 20,
-            ),
+            Icon(Icons.link, color: AppColors.primaryColor, size: 20),
             const SizedBox(width: 8),
             Expanded(
               child: Text(
@@ -1486,18 +1489,11 @@ class ProductDetailScreen extends StatelessWidget {
               ),
             ),
             IconButton(
-              icon: Icon(
-                Icons.close,
-                color: AppColors.primaryColor,
-                size: 18,
-              ),
+              icon: Icon(Icons.close, color: AppColors.primaryColor, size: 18),
               onPressed: () {
                 controller.showDeepLinkIndicator.value = false;
               },
-              constraints: const BoxConstraints(
-                minWidth: 32,
-                minHeight: 32,
-              ),
+              constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
               padding: EdgeInsets.zero,
             ),
           ],
@@ -1511,10 +1507,7 @@ class ProductDetailScreen extends StatelessWidget {
 class ProductBottomBar extends StatelessWidget {
   final ProductDetailController controller;
 
-  const ProductBottomBar({
-    super.key,
-    required this.controller,
-  });
+  const ProductBottomBar({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -1532,7 +1525,9 @@ class ProductBottomBar extends StatelessWidget {
       ),
       child: SafeArea(
         child: Obx(() {
-          print('🔍 ProductBottomBar - itemAddedToCart: ${controller.itemAddedToCart.value}');
+          print(
+            '🔍 ProductBottomBar - itemAddedToCart: ${controller.itemAddedToCart.value}',
+          );
           print('🔍 ProductBottomBar - isInStock: ${controller.isInStock}');
           if (!controller.isInStock) {
             return SizedBox(
@@ -1686,7 +1681,10 @@ class ProductBottomBar extends StatelessWidget {
                 child: SizedBox(
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: controller.isAddingToCart.value ? null : controller.addToCart,
+                    onPressed:
+                        controller.isAddingToCart.value
+                            ? null
+                            : controller.addToCart,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primaryColor,
                       foregroundColor: Colors.white,
@@ -1694,24 +1692,27 @@ class ProductBottomBar extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: controller.isAddingToCart.value
-                        ? const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    child:
+                        controller.isAddingToCart.value
+                            ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  Colors.white,
+                                ),
+                              ),
+                            )
+                            : Text(
+                              controller.isViewingVariant.value
+                                  ? 'Add Variant to Cart'
+                                  : 'Add to Cart',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
-                          )
-                        : Text(
-                            controller.isViewingVariant.value 
-                                ? 'Add Variant to Cart' 
-                                : 'Add to Cart',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
                   ),
                 ),
               ),
@@ -1721,6 +1722,4 @@ class ProductBottomBar extends StatelessWidget {
       ),
     );
   }
-
-  
 }

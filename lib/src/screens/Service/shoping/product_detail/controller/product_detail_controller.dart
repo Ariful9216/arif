@@ -8,6 +8,11 @@ import 'package:arif_mart/core/helper/hive_helper.dart';
 import 'package:arif_mart/src/screens/Service/shoping/controller/shopping_controller.dart';
 import 'package:arif_mart/src/widget/affiliate_share_dialog.dart';
 import 'package:arif_mart/src/utils/subscription_checker.dart';
+import 'package:dio/dio.dart';
+import 'package:gal/gal.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 
 class ProductDetailController extends GetxController {
   // Product data
@@ -660,5 +665,98 @@ class ProductDetailController extends GetxController {
         );
       }
     });
+  }
+
+  // Download image to gallery
+  Future<void> downloadImage(String imageUrl, int imageIndex) async {
+    try {
+      // Show loading snackbar
+      Get.showSnackbar(
+        GetSnackBar(
+          message: 'Downloading image...',
+          duration: const Duration(seconds: 2),
+          backgroundColor: Colors.blue,
+          showProgressIndicator: true,
+        ),
+      );
+
+      // Request permissions
+      PermissionStatus status;
+      if (Platform.isAndroid) {
+        // For Android 13 (API 33) and above, we need different permissions
+        if (await _getAndroidVersion() >= 33) {
+          status = await Permission.photos.request();
+        } else {
+          status = await Permission.storage.request();
+        }
+      } else if (Platform.isIOS) {
+        status = await Permission.photos.request();
+      } else {
+        Get.snackbar(
+          'Error',
+          'Platform not supported',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red[100],
+          colorText: Colors.red[900],
+        );
+        return;
+      }
+
+      // Check if permission granted
+      if (!status.isGranted) {
+        Get.snackbar(
+          'Permission Denied',
+          'Please grant storage permission to download images',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.orange[100],
+          colorText: Colors.orange[900],
+        );
+        return;
+      }
+
+      // Download image
+      final dio = Dio();
+      final tempDir = await getTemporaryDirectory();
+      final filePath = '${tempDir.path}/product_${productId}_image_$imageIndex.jpg';
+
+      await dio.download(imageUrl, filePath);
+
+      // Save to gallery using Gal
+      await Gal.putImage(filePath);
+
+      // Clean up temp file
+      final file = File(filePath);
+      if (await file.exists()) {
+        await file.delete();
+      }
+
+      // Show success message
+      Get.snackbar(
+        'Success',
+        'Image saved to gallery',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green[100],
+        colorText: Colors.green[900],
+        duration: const Duration(seconds: 2),
+      );
+    } catch (e) {
+      print('Error downloading image: $e');
+      Get.snackbar(
+        'Error',
+        'Failed to download image: ${e.toString()}',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red[100],
+        colorText: Colors.red[900],
+      );
+    }
+  }
+
+  // Helper method to get Android version
+  Future<int> _getAndroidVersion() async {
+    if (Platform.isAndroid) {
+      // Simplified version - assumes Android 13+ to be safe
+      return 33;
+    }
+    return 0;
   }
 }
