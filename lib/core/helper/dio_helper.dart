@@ -140,7 +140,7 @@ class DioApiHelper {
           if (showErrorToast == true) {
             showToast(e.response?.data['message'].toString() ?? 'Something went to wrong');
           }
-        } else if (e.response?.statusCode != 404) {  // Don't show toast for 404 if we handled it above
+        } else if (e.response?.statusCode != 404 && e.response?.statusCode != 401) {  // Don't show toast for 404 or 401
           if (showErrorToast == true) {
             showToast(e.response?.data['message']?.toString() ?? 'Something went wrong');
           }

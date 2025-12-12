@@ -15,7 +15,7 @@ class WishlistController extends GetxController {
   final RxInt currentPage = 1.obs;
   final RxBool hasMoreProducts = true.obs;
   final RxInt totalCount = 0.obs;
-  
+
   // New wishlist data
   final Rx<WishlistPagination?> pagination = Rx<WishlistPagination?>(null);
   final Rx<WishlistSummary?> summary = Rx<WishlistSummary?>(null);
@@ -29,63 +29,76 @@ class WishlistController extends GetxController {
     super.onInit();
     print("❤️  WishlistController initializing...");
     _ecommerceService = Get.find<EcommerceService>();
-    
+
     // Load data in the background without waiting
     print("📋 Starting background wishlist loading...");
     Future.microtask(() async {
       try {
         print("📝 Loading wishlist...");
-        await loadWishlist().timeout(
-          const Duration(seconds: 8),
-          onTimeout: () => print("⏱️ loadWishlist timeout")
-        ).catchError((e) => print("❌ loadWishlist error: $e"));
+        await loadWishlist()
+            .timeout(
+              const Duration(seconds: 8),
+              onTimeout: () => print("⏱️ loadWishlist timeout"),
+            )
+            .catchError((e) => print("❌ loadWishlist error: $e"));
       } catch (e) {
         print("❌ Unexpected error in loadWishlist: $e");
       }
     });
-    
+
     Future.microtask(() async {
       try {
         print("🔢 Getting wishlist count...");
-        await getWishlistCount().timeout(
-          const Duration(seconds: 8),
-          onTimeout: () => print("⏱️ getWishlistCount timeout")
-        ).catchError((e) => print("❌ getWishlistCount error: $e"));
+        await getWishlistCount()
+            .timeout(
+              const Duration(seconds: 8),
+              onTimeout: () => print("⏱️ getWishlistCount timeout"),
+            )
+            .catchError((e) => print("❌ getWishlistCount error: $e"));
       } catch (e) {
         print("❌ Unexpected error in getWishlistCount: $e");
       }
     });
-    
+
     // Initialize wishlist status in the background
     Future.microtask(() async {
       try {
         print("🏷️  Initializing wishlist status...");
-        await _initializeWishlistStatus().timeout(
-          const Duration(seconds: 8),
-          onTimeout: () => print("⏱️ _initializeWishlistStatus timeout")
-        ).catchError((e) => print("❌ _initializeWishlistStatus error: $e"));
+        await _initializeWishlistStatus()
+            .timeout(
+              const Duration(seconds: 8),
+              onTimeout: () => print("⏱️ _initializeWishlistStatus timeout"),
+            )
+            .catchError((e) => print("❌ _initializeWishlistStatus error: $e"));
       } catch (e) {
         print("❌ Unexpected error in _initializeWishlistStatus: $e");
       }
     });
-    
-    print("✅ WishlistController initialization complete (data loading in background)");
+
+    print(
+      "✅ WishlistController initialization complete (data loading in background)",
+    );
   }
-  
+
   // Initialize wishlist status for all products in the wishlist
   Future<void> _initializeWishlistStatus() async {
     try {
-      final response = await _ecommerceService.getUserWishlist(page: 1, limit: 100);
+      final response = await _ecommerceService.getUserWishlist(
+        page: 1,
+        limit: 100,
+      );
       if (response != null && response['success'] == true) {
         final messageData = response['message'];
         List<dynamic> items = [];
         if (messageData is Map && messageData['wishlistItems'] != null) {
           items = messageData['wishlistItems'];
         }
-        
+
         // Mark all wishlist products as true in our reactive map
         for (var item in items) {
-          if (item != null && item['product'] != null && item['product']['_id'] != null) {
+          if (item != null &&
+              item['product'] != null &&
+              item['product']['_id'] != null) {
             final productId = item['product']['_id'].toString();
             productWishlistStatus[productId] = true;
           }
@@ -94,8 +107,11 @@ class WishlistController extends GetxController {
       }
     } catch (e) {
       // Gracefully handle errors (401 unauthorized, network issues, etc.)
-      if (e.toString().contains('401') || e.toString().contains('Unauthorized')) {
-        print('⚠️ Wishlist: Authentication error (401) - User session may have expired');
+      if (e.toString().contains('401') ||
+          e.toString().contains('Unauthorized')) {
+        print(
+          '⚠️ Wishlist: Authentication error (401) - User session may have expired',
+        );
         // Don't crash the app, just skip wishlist initialization
       } else {
         print('⚠️ Wishlist initialization error: $e');
@@ -129,19 +145,19 @@ class WishlistController extends GetxController {
       if (response != null && response['success'] == true) {
         // Handle the new API response structure
         final data = response['data'];
-        
+
         if (data != null) {
           // Parse wishlist items
           List<dynamic> items = data['wishlistItems'] ?? [];
           List<WishlistItem> newWishlistItems = [];
           List<ProductData> newProducts = [];
-          
+
           for (var item in items) {
             try {
               WishlistItem wishlistItem = WishlistItem.fromJson(item);
               newWishlistItems.add(wishlistItem);
               newProducts.add(wishlistItem.product);
-              
+
               // Update wishlist status
               final productId = wishlistItem.product.id;
               productWishlistStatus[productId] = true;
@@ -151,7 +167,7 @@ class WishlistController extends GetxController {
               continue;
             }
           }
-          
+
           if (refresh) {
             wishlistItems.value = newWishlistItems;
             wishlistProducts.value = newProducts;
@@ -159,22 +175,25 @@ class WishlistController extends GetxController {
             wishlistItems.addAll(newWishlistItems);
             wishlistProducts.addAll(newProducts);
           }
-          
+
           // Update pagination
           if (data['pagination'] != null) {
             pagination.value = WishlistPagination.fromJson(data['pagination']);
             hasMoreProducts.value = pagination.value?.hasNextPage ?? false;
-            totalCount.value = pagination.value?.totalItems ?? wishlistItems.length;
+            totalCount.value =
+                pagination.value?.totalItems ?? wishlistItems.length;
           }
-          
+
           // Update summary
           if (data['summary'] != null) {
             summary.value = WishlistSummary.fromJson(data['summary']);
           }
         }
 
-        print('Loaded ${wishlistItems.length} wishlist items for page ${currentPage.value}');
-        
+        print(
+          'Loaded ${wishlistItems.length} wishlist items for page ${currentPage.value}',
+        );
+
         if (wishlistItems.isNotEmpty) {
           currentPage.value++;
         }
@@ -185,18 +204,21 @@ class WishlistController extends GetxController {
     } catch (e) {
       // Gracefully handle errors without crashing the app
       String errorMsg = e.toString();
-      
+
       if (errorMsg.contains('401') || errorMsg.contains('Unauthorized')) {
-        print('⚠️ Wishlist: Authentication error (401) - User session may have expired');
+        print(
+          '⚠️ Wishlist: Authentication error (401) - User session may have expired',
+        );
         errorMessage.value = 'Session expired. Please log in again.';
-      } else if (errorMsg.contains('Network') || errorMsg.contains('SocketException')) {
+      } else if (errorMsg.contains('Network') ||
+          errorMsg.contains('SocketException')) {
         print('⚠️ Wishlist: Network error');
         errorMessage.value = 'Network error. Check your connection.';
       } else {
         errorMessage.value = 'Error loading wishlist';
         print('Error loading wishlist: $e');
       }
-      
+
       // Clear any partial data on error
       if (currentPage.value == 1) {
         wishlistProducts.clear();
@@ -227,7 +249,7 @@ class WishlistController extends GetxController {
       if (response != null && response['success'] == true) {
         productWishlistStatus[productId] = true;
         print('Product $productId added to wishlist');
-        
+
         // Refresh wishlist to get updated list
         await refreshWishlist();
         return true;
@@ -247,11 +269,11 @@ class WishlistController extends GetxController {
       final success = await _ecommerceService.removeFromWishlist(productId);
       if (success) {
         productWishlistStatus[productId] = false;
-        
+
         // Remove from local list
         wishlistProducts.removeWhere((product) => product.id == productId);
         totalCount.value = wishlistProducts.length;
-        
+
         print('Product $productId removed from wishlist');
         return true;
       } else {
@@ -272,7 +294,7 @@ class WishlistController extends GetxController {
         // Parse the actual response to get the current status
         final messageData = response['message'];
         final bool isInWishlist;
-        
+
         if (messageData is Map) {
           // New API response format
           isInWishlist = messageData['isInWishlist'] ?? false;
@@ -280,13 +302,13 @@ class WishlistController extends GetxController {
           // Fallback: toggle current status
           isInWishlist = !isProductInWishlist(productId);
         }
-        
+
         // Update the status for this product
         productWishlistStatus[productId] = isInWishlist;
-        
+
         // Force UI update by triggering observable change
         productWishlistStatus.refresh();
-        
+
         if (isInWishlist) {
           print('Product $productId added to wishlist via toggle');
           // Refresh to get the product in the list
@@ -297,10 +319,10 @@ class WishlistController extends GetxController {
           wishlistProducts.removeWhere((product) => product.id == productId);
           totalCount.value = wishlistProducts.length;
         }
-        
+
         // Trigger a global update to notify all widgets
         update();
-        
+
         return true;
       } else {
         print('Failed to toggle wishlist: ${response?['message']}');
@@ -321,7 +343,9 @@ class WishlistController extends GetxController {
   // Check product wishlist status from API
   Future<void> checkProductWishlistStatus(String productId) async {
     try {
-      final isInWishlist = await _ecommerceService.checkProductInWishlist(productId);
+      final isInWishlist = await _ecommerceService.checkProductInWishlist(
+        productId,
+      );
       productWishlistStatus[productId] = isInWishlist;
       productWishlistStatus.refresh();
     } catch (e) {
@@ -384,7 +408,7 @@ class WishlistController extends GetxController {
   bool get hasWishlistItems => wishlistProducts.isNotEmpty;
   bool get isWishlistEmpty => wishlistProducts.isEmpty && !isLoading.value;
   String get wishlistCountText => totalCount.value.toString();
-  
+
   // New getters for enhanced data
   WishlistPagination? get wishlistPagination => pagination.value;
   WishlistSummary? get wishlistSummary => summary.value;
