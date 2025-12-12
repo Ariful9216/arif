@@ -9,16 +9,21 @@ class HistoryService {
 
   HistoryService() : _dio = Dio() {
     _dio.options.baseUrl = Apis.baseUrl;
-    
+
+    // Configure Dio timeouts
+    _dio.options.connectTimeout = const Duration(seconds: 30);
+    _dio.options.receiveTimeout = const Duration(seconds: 30);
+    _dio.options.sendTimeout = const Duration(seconds: 30);
+
     // Set default headers
     _dio.options.headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
     };
-    
+
     // Automatically set token from HiveHelper
     setTokenFromHive();
-    
+
     // Add request interceptor for logging
     _dio.interceptors.add(LogInterceptor(
       requestBody: true,

@@ -1,8 +1,5 @@
 /// API Environment enumeration
-enum ApiEnvironment {
-  production,
-  development,
-}
+enum ApiEnvironment { production, development }
 
 class Apis {
   /// Current environment - defaults to production
@@ -50,12 +47,14 @@ class Apis {
   /// **Development (Emulator - iOS)**: Use http://127.0.0.1:3001
 
   // ============ CONFIGURE HERE FOR YOUR ENVIRONMENT ============
+  // Production (currently not responding)
   static String apiHost = "https://api.arifmart.app";
   static String ecommerceHost = "https://ecommerce.arifmart.app";
   static String rechargeHost = "https://recharge.arifmart.app";
-  static String chatSocketHost = "https://api.arifmart.app"; // Remove /api/v1/ for socket
+  static String chatSocketHost =
+      "https://api.arifmart.app"; // Remove /api/v1/ for socket
 
-  // For development, uncomment and use one of these:
+  // Development - Android Emulator (ACTIVE)
   // static String apiHost = "http://10.0.2.2:3001"; // Android Emulator
   // static String ecommerceHost = "http://10.0.2.2:5000"; // Android Emulator
   // static String rechargeHost = "http://10.0.2.2:3002"; // Android Emulator
@@ -76,10 +75,9 @@ class Apis {
   static String get operatorBaseUrl => "$apiHost/api/uploads/operators/";
   static String get socialMediaBaseUrl => "$apiHost/api/uploads/social-media/";
   static String get sliderBaseUrl => "$apiHost/api/uploads/sliders/";
-  static String get mobileBankingBaseUrl => "$apiHost/api/uploads/mobile-banking/";
+  static String get mobileBankingBaseUrl =>
+      "$apiHost/api/uploads/mobile-banking/";
   static String get rechargeBaseUrl => "$rechargeHost/api/";
-
-
 
   static const register = "users/register";
   static const login = "users/login";
@@ -104,26 +102,27 @@ class Apis {
   static const income = "users/income";
   static const mobileBanking = "users/mobile-banking";
   static const manualWithdrawals = "users/manual-withdrawals";
-  
+
   // Recharge API endpoints
   static const recharge = "users/recharge";
   static const rechargeOperators = "users/recharge/operators";
-  
+
   // Chat API endpoints
   static const chatConversations = "chat/conversations";
   static const chatUnreadCount = "chat/unread-count";
-  static const chatSupportAdmin = "chat/support-admin"; // Get primary support admin ID
-  
+  static const chatSupportAdmin =
+      "chat/support-admin"; // Get primary support admin ID
+
   // Recovery API endpoints
   static const recovery = "recovery";
   static const recoveryResetPassword = "recovery/reset-password";
-  
-  
+
   // E-commerce API endpoints - Base URL for ecommerce service
-  static String get ecommerceBaseUrl => "$ecommerceHost/api/v1/";  // Products
+  static String get ecommerceBaseUrl => "$ecommerceHost/api/v1/"; // Products
   static const products = "products";
   static const productById = "products/";
-  static const productsByCategory = "products/category/"; // Get products by category
+  static const productsByCategory =
+      "products/category/"; // Get products by category
   static const mobileProductsAll = "products/mobile/all";
   static const mobileProductsNew = "products/mobile/new";
   static const mobileProductsTrending = "products/mobile/trending";
@@ -133,14 +132,14 @@ class Apis {
   static const productsTopRated = "products/top-rated";
   static const productsBrands = "products/brands";
   static const productsTags = "products/tags";
-  
+
   // Categories
   static const categories = "categories";
-  
+
   // Banners
   static const banners = "banners";
   static const activeBanners = "banners/active";
-  
+
   // Cart (Fallback to old API until new system is implemented)
   static const cart = "carts";
   static const cartItems = "carts/items";
@@ -152,7 +151,7 @@ class Apis {
   static const cartCheckProduct = "carts/check-product";
   static const cartBulkUpdate = "carts/bulk-update";
   static const cartExtendExpiration = "carts/extend-expiration";
-  
+
   // Wishlist - Updated to match new API structure
   static const wishlist = "wishlists";
   static const wishlistToggle = "wishlists/toggle";
@@ -161,21 +160,21 @@ class Apis {
   static const wishlistClear = "wishlists/clear";
   static const wishlistStats = "wishlists/stats";
   static const wishlistAdminAll = "wishlists/admin/all";
-  
+
   // Orders
   static const orders = "orders";
   static const userOrders = "orders/my-orders";
   static const orderStats = "orders/stats/my-orders";
-  
+
   // Addresses
   static const addresses = "addresses";
   static const defaultAddress = "addresses/default";
   static const addressesForOrder = "addresses/for-order";
-  
+
   // Variants
   static const variants = "variants";
   static const variantById = "variants/single";
-  
+
   // Affiliate API endpoints
   static const affiliateGenerateLink = "affiliates/links/generate";
   static const affiliateRedirect = "affiliates/links/redirect";

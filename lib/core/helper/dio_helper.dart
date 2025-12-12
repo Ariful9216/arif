@@ -24,6 +24,11 @@ class DioApiHelper {
     header = isTokeNeeded == false
         ? {'Content-Type': 'application/json', 'Accept': 'application/json'}
         : {'Content-Type': 'application/json', 'Authorization': 'Bearer ${HiveHelper.getToken}', 'Accept': 'application/json'};
+
+    // Configure Dio timeouts
+    dio.options.connectTimeout = const Duration(seconds: 30);
+    dio.options.receiveTimeout = const Duration(seconds: 30);
+    dio.options.sendTimeout = const Duration(seconds: 30);
   }
 
   Future<dynamic> post({required String url, required Map<String, dynamic> body}) async {
@@ -519,6 +524,11 @@ class EcommerceDioHelper {
     header = isTokenNeeded == false
         ? {'Content-Type': 'application/json', 'Accept': 'application/json'}
         : {'Content-Type': 'application/json', 'Authorization': 'Bearer ${HiveHelper.getToken}', 'Accept': 'application/json'};
+
+    // Configure Dio timeouts
+    dio.options.connectTimeout = const Duration(seconds: 30);
+    dio.options.receiveTimeout = const Duration(seconds: 30);
+    dio.options.sendTimeout = const Duration(seconds: 30);
   }
 
   Future<dynamic> post({required String url, required Map<String, dynamic> body}) async {
@@ -641,6 +651,11 @@ class RechargeDioHelper {
     header = isTokenNeeded == false
         ? {'Content-Type': 'application/json', 'Accept': 'application/json'}
         : {'Content-Type': 'application/json', 'Authorization': 'Bearer ${HiveHelper.getToken}', 'Accept': 'application/json'};
+
+    // Configure Dio timeouts
+    dio.options.connectTimeout = const Duration(seconds: 30);
+    dio.options.receiveTimeout = const Duration(seconds: 30);
+    dio.options.sendTimeout = const Duration(seconds: 30);
   }
 
   Future<dynamic> post({required String url, required Map<String, dynamic> body}) async {
