@@ -196,7 +196,7 @@ class _ImageDebugDialogState extends State<_ImageDebugDialog> {
           Row(
             children: [
               Icon(
-                isLoadable ? Icons.check_circle : Icons.error_circle,
+                isLoadable ? Icons.check_circle : Icons.error,
                 color: isLoadable ? Colors.green : Colors.red,
                 size: 16,
               ),

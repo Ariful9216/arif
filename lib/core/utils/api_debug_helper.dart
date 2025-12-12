@@ -311,7 +311,7 @@ class _ApiDebugDialogState extends State<_ApiDebugDialog> {
           Row(
             children: [
               Icon(
-                isSuccess ? Icons.check_circle : Icons.error_circle,
+                isSuccess ? Icons.check_circle : Icons.error,
                 color: isSuccess ? Colors.green : Colors.red,
                 size: 16,
               ),

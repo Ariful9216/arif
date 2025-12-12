@@ -164,16 +164,16 @@ class ModernProductCard extends StatelessWidget {
                       width: double.infinity,
                       height: double.infinity,
                       fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return _buildPlaceholderImage();
-                    },
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return _buildLoadingImage();
-                    },
-                  )
-                : _buildPlaceholderImage(),
-          ),
+                      errorBuilder: (context, error, stackTrace) {
+                        return _buildPlaceholderImage();
+                      },
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return _buildLoadingImage();
+                      },
+                    )
+                  : _buildPlaceholderImage(),
+            ),
           
           // Flash Sale Badge with discount percentage
           if (product.flashSale.isCurrentlyActive)
@@ -243,6 +243,7 @@ class ModernProductCard extends StatelessWidget {
             ),
         ],
       ),
+    ),
     );
   }
 

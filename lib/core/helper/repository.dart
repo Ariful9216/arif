@@ -1,4 +1,3 @@
-import 'package:get/get.dart';
 import 'package:arif_mart/core/constants/var_constants.dart';
 import 'package:arif_mart/core/helper/export.dart';
 
@@ -26,7 +25,7 @@ class Repository {
     Map<String, dynamic>? data = await DioApiHelper(isTokeNeeded: true).get(url: Apis.myProfile);
     if (data != null) {
       MyProfileModel myProfileModel = MyProfileModel.fromJson(data);
-      VarConstants.myProfileModel?.value = myProfileModel;
+      VarConstants.myProfileModel.value = myProfileModel;
       return myProfileModel;
     }
     return null;

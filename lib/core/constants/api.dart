@@ -1,40 +1,83 @@
+/// API Environment enumeration
+enum ApiEnvironment {
+  production,
+  development,
+}
+
 class Apis {
+  /// Current environment - defaults to production
+  static ApiEnvironment _currentEnvironment = ApiEnvironment.production;
+
+  /// Get current environment
+  static ApiEnvironment getEnvironment() => _currentEnvironment;
+
+  /// Get current environment name
+  static String getEnvironmentName() {
+    switch (_currentEnvironment) {
+      case ApiEnvironment.production:
+        return 'Production';
+      case ApiEnvironment.development:
+        return 'Development';
+    }
+  }
+
+  /// Set environment and update host URLs
+  static void setEnvironment(ApiEnvironment environment) {
+    _currentEnvironment = environment;
+
+    switch (environment) {
+      case ApiEnvironment.production:
+        apiHost = "https://api.arifmart.app";
+        ecommerceHost = "https://ecommerce.arifmart.app";
+        rechargeHost = "https://recharge.arifmart.app";
+        chatSocketHost = "https://api.arifmart.app";
+        break;
+      case ApiEnvironment.development:
+        // Default to Android Emulator addresses
+        apiHost = "http://10.0.2.2:3001";
+        ecommerceHost = "http://10.0.2.2:5000";
+        rechargeHost = "http://10.0.2.2:3002";
+        chatSocketHost = "http://10.0.2.2:3001";
+        break;
+    }
+  }
+
   /// Environment configuration - Change these for development/testing
-  /// 
+  ///
   /// **Production**: Use https://api.arifmart.app
   /// **Development (Local Machine)**: Use http://localhost:3001
   /// **Development (Emulator - Android)**: Use http://10.0.2.2:3001
   /// **Development (Emulator - iOS)**: Use http://127.0.0.1:3001
-  
+
   // ============ CONFIGURE HERE FOR YOUR ENVIRONMENT ============
-  static const String apiHost = "https://api.arifmart.app";
-  static const String ecommerceHost = "https://ecommerce.arifmart.app";
-  static const String rechargeHost = "https://recharge.arifmart.app";
-  static const String chatSocketHost = "https://api.arifmart.app"; // Remove /api/v1/ for socket
-  
+  static String apiHost = "https://api.arifmart.app";
+  static String ecommerceHost = "https://ecommerce.arifmart.app";
+  static String rechargeHost = "https://recharge.arifmart.app";
+  static String chatSocketHost = "https://api.arifmart.app"; // Remove /api/v1/ for socket
+
   // For development, uncomment and use one of these:
-  // static const String apiHost = "http://10.0.2.2:3001"; // Android Emulator
-  // static const String ecommerceHost = "http://10.0.2.2:5000"; // Android Emulator
-  // static const String rechargeHost = "http://10.0.2.2:3002"; // Android Emulator
-  // static const String chatSocketHost = "http://10.0.2.2:3001"; // Android Emulator
-  
-  // static const String apiHost = "http://127.0.0.1:3001"; // iOS Simulator
-  // static const String ecommerceHost = "http://127.0.0.1:5000"; // iOS Simulator
-  // static const String rechargeHost = "http://127.0.0.1:3002"; // iOS Simulator
-  // static const String chatSocketHost = "http://127.0.0.1:3001"; // iOS Simulator
-  
-  // static const String apiHost = "http://localhost:3001"; // Local Machine
-  // static const String ecommerceHost = "http://localhost:5000"; // Local Machine
-  // static const String rechargeHost = "http://localhost:3002"; // Local Machine
-  // static const String chatSocketHost = "http://localhost:3001"; // Local Machine
+  // static String apiHost = "http://10.0.2.2:3001"; // Android Emulator
+  // static String ecommerceHost = "http://10.0.2.2:5000"; // Android Emulator
+  // static String rechargeHost = "http://10.0.2.2:3002"; // Android Emulator
+  // static String chatSocketHost = "http://10.0.2.2:3001"; // Android Emulator
+
+  // static String apiHost = "http://127.0.0.1:3001"; // iOS Simulator
+  // static String ecommerceHost = "http://127.0.0.1:5000"; // iOS Simulator
+  // static String rechargeHost = "http://127.0.0.1:3002"; // iOS Simulator
+  // static String chatSocketHost = "http://127.0.0.1:3001"; // iOS Simulator
+
+  // static String apiHost = "http://localhost:3001"; // Local Machine
+  // static String ecommerceHost = "http://localhost:5000"; // Local Machine
+  // static String rechargeHost = "http://localhost:3002"; // Local Machine
+  // static String chatSocketHost = "http://localhost:3001"; // Local Machine
   // ============================================================
-  
-  static const baseUrl = "$apiHost/api/v1/";
-  static const operatorBaseUrl = "$apiHost/api/uploads/operators/";
-  static const socialMediaBaseUrl = "$apiHost/api/uploads/social-media/";
-  static const sliderBaseUrl = "$apiHost/api/uploads/sliders/";
-  static const mobileBankingBaseUrl = "$apiHost/api/uploads/mobile-banking/";
-  static const rechargeBaseUrl = "$rechargeHost/api/";
+
+  static String get baseUrl => "$apiHost/api/v1/";
+  static String get operatorBaseUrl => "$apiHost/api/uploads/operators/";
+  static String get socialMediaBaseUrl => "$apiHost/api/uploads/social-media/";
+  static String get sliderBaseUrl => "$apiHost/api/uploads/sliders/";
+  static String get mobileBankingBaseUrl => "$apiHost/api/uploads/mobile-banking/";
+  static String get rechargeBaseUrl => "$rechargeHost/api/";
 
 
 
@@ -77,7 +120,7 @@ class Apis {
   
   
   // E-commerce API endpoints - Base URL for ecommerce service
-  static const String ecommerceBaseUrl = "$ecommerceHost/api/v1/";  // Products
+  static String get ecommerceBaseUrl => "$ecommerceHost/api/v1/";  // Products
   static const products = "products";
   static const productById = "products/";
   static const productsByCategory = "products/category/"; // Get products by category

@@ -408,14 +408,6 @@ class FlashSale {
     
     return true;
   }
-  
-  // Helper to format duration for debugging
-  String _formatDuration(Duration duration) {
-    final hours = duration.inHours;
-    final minutes = duration.inMinutes % 60;
-    final seconds = duration.inSeconds % 60;
-    return '${hours}h ${minutes}m ${seconds}s';
-  }
 
   // Get time remaining until flash sale ends
   Duration? get timeRemaining {

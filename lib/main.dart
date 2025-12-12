@@ -22,7 +22,6 @@ import 'package:arif_mart/src/screens/Service/shoping/controller/shopping_contro
 
 import 'core/constants/routes/pages.dart';
 import 'core/constants/routes/routes.dart';
-import 'dart:io';
 
 import 'core/helper/notification_service.dart';
 import 'firebase_options.dart';
@@ -31,8 +30,7 @@ class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
-      ..badCertificateCallback =
-          (X509Certificate cert, String host, int port) {
+      ..badCertificateCallback = (X509Certificate cert, String host, int port) {
         // You can add custom validation logic here if needed
         print('Allowing self-signed certificate: $host');
         return true; // Always allow
@@ -41,17 +39,18 @@ class MyHttpOverrides extends HttpOverrides {
 }
 
 Future<bool> checkUserIsLogin() async {
-  if(HiveHelper.getIsLogin){
+  if (HiveHelper.getIsLogin) {
     try {
       MyProfileModel? response = await Repository.getMyProfile();
-      if(response?.data != null){
+      if (response?.data != null) {
         // If user is active, allow login regardless of verification status
         // This allows unverified users to access payment screen
-        if(response!.data!.isActive == true){
+        if (response!.data!.isActive == true) {
           return true;
         }
         // If user is verified and active, also allow login
-        return (response.data!.isVerified ?? false) && (response.data!.isActive ?? false);
+        return (response.data!.isVerified ?? false) &&
+            (response.data!.isActive ?? false);
       }
       return false;
     } catch (e) {
@@ -60,7 +59,7 @@ Future<bool> checkUserIsLogin() async {
       await HiveHelper.setIsLogin(false);
       return false;
     }
-  }else{
+  } else {
     return false;
   }
 }
@@ -68,33 +67,35 @@ Future<bool> checkUserIsLogin() async {
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
-  
+
   // Initialize Hive (fast local storage)
   await HiveHelper.init();
-  
+
   // Clean up expired referrer links in background (non-blocking)
-  HiveHelper.cleanExpiredReferrers().catchError((e) => print('Error cleaning referrers: $e'));
-  
+  HiveHelper.cleanExpiredReferrers().catchError(
+    (e) => print('Error cleaning referrers: $e'),
+  );
+
   // Log timezone information for debugging
   _logTimezoneDebugInfo();
-  
+
   // Initialize Firebase synchronously (required for proper initialization)
   await _initializeFirebase();
-  
+
   // Initialize services lazily (only when needed)
   _initializeServicesLazily();
-  
+
   // Initialize deep link service immediately (required for deep links)
   print('🔗 Initializing DeepLinkService...');
   await Get.putAsync(() => DeepLinkService().init());
   print('✅ DeepLinkService initialized successfully');
-  
+
   // Check login status from local storage first (fast)
   bool isLogin = HiveHelper.getIsLogin;
-  
+
   // Start the app immediately
   runApp(MyApp(initialRoute: isLogin ? Routes.home : Routes.login));
-  
+
   // Verify login status in background (non-blocking)
   _verifyLoginStatusInBackground();
 }
@@ -137,7 +138,8 @@ Future<void> _initializeFirebase() {
     } on FirebaseException catch (e) {
       // Handle duplicate-app safely and continue
       final code = e.code ?? '';
-      if (code.contains('duplicate') || e.message?.contains('already exists') == true) {
+      if (code.contains('duplicate') ||
+          e.message?.contains('already exists') == true) {
         print('⚠️ Duplicate Firebase app detected, safe to continue: $e');
       } else {
         print('❌ Firebase initialization failed (FirebaseException): $e');
@@ -157,15 +159,15 @@ void _initializeServicesLazily() {
   Get.put(EcommerceService());
   Get.put(OrderService()); // OrderService needed by OrderController
   Get.put(AddressService()); // AddressService needed by OrderController
-  
+
   // Initialize other services lazily (when first accessed)
   Get.lazyPut(() => ChatService());
   Get.lazyPut(() => RechargeService());
   Get.lazyPut(() => RatedProductsService());
-  
+
   // Initialize WishlistController immediately (needed for heart icons)
   Get.put(WishlistController());
-  
+
   // Initialize ShoppingController immediately (needed by ProductDetailController)
   Get.put(ShoppingController());
 }
@@ -190,57 +192,73 @@ void _logTimezoneDebugInfo() {
     final now = DateTime.now();
     final utc = now.toUtc();
     final offset = now.timeZoneOffset;
-    
+
     print('\n');
     print('🕒 TIMEZONE DEBUG INFO AT APP STARTUP:');
     print('📱 Local time: $now (${now.hour}:${now.minute})');
     print('🌐 UTC time: $utc (${utc.hour}:${utc.minute})');
     print('🔀 Device offset: ${offset.inHours}h ${offset.inMinutes % 60}m');
-    print('🌐 Is Bangladesh timezone (GMT+6): ${offset.inHours == 6 ? "YES" : "NO"}');
-    
+    print(
+      '🌐 Is Bangladesh timezone (GMT+6): ${offset.inHours == 6 ? "YES" : "NO"}',
+    );
+
     // Example UTC string with Z suffix
     final exampleTime = "2023-10-22T13:30:00.000Z"; // Time with Z suffix
-    
+
     // 1. Parse with standard method (interprets Z as UTC)
     final parsedStandard = DateTime.parse(exampleTime);
-    
+
     // 2. Parse with our custom method (ignores Z suffix)
     final parsedCustom = TimezoneUtil.parseAsLocalTime(exampleTime);
-    
+
     print('\n🔄 TIMEZONE HANDLING COMPARISON:');
     print('   Original string: $exampleTime');
-    print('   Standard parsing: $parsedStandard (Hour: ${parsedStandard.hour})');
-    print('   Custom parsing (ignoring Z): $parsedCustom (Hour: ${parsedCustom?.hour})');
-    
+    print(
+      '   Standard parsing: $parsedStandard (Hour: ${parsedStandard.hour})',
+    );
+    print(
+      '   Custom parsing (ignoring Z): $parsedCustom (Hour: ${parsedCustom?.hour})',
+    );
+
     // Show the practical difference between the two
     if (parsedCustom != null) {
       final hourDifference = parsedCustom.hour - parsedStandard.hour;
       print('   Hour difference: $hourDifference hour(s)');
     }
-    
+
     // Flash sale active comparison example
     final exampleStartTime = "2023-10-22T08:00:00.000Z";
     final exampleEndTime = "2023-10-22T20:00:00.000Z";
-    
+
     // Standard parsing (with timezone conversion)
     final standardStart = DateTime.parse(exampleStartTime);
     final standardEnd = DateTime.parse(exampleEndTime);
-    final isActiveStandard = now.isAfter(standardStart) && now.isBefore(standardEnd);
-    
+    final isActiveStandard =
+        now.isAfter(standardStart) && now.isBefore(standardEnd);
+
     // Custom parsing (ignoring timezone)
     final customStart = TimezoneUtil.parseAsLocalTime(exampleStartTime);
     final customEnd = TimezoneUtil.parseAsLocalTime(exampleEndTime);
-    final isActiveCustom = customStart != null && customEnd != null && 
-                           now.isAfter(customStart) && now.isBefore(customEnd);
-    
+    final isActiveCustom =
+        customStart != null &&
+        customEnd != null &&
+        now.isAfter(customStart) &&
+        now.isBefore(customEnd);
+
     print('\n🛒 FLASH SALE ACTIVE EXAMPLE:');
     print('   Current hour: ${now.hour}');
-    print('   Standard parsing: Start ${standardStart.hour}h, End ${standardEnd.hour}h → Active: $isActiveStandard');
-    print('   Custom parsing: Start ${customStart?.hour ?? "N/A"}h, End ${customEnd?.hour ?? "N/A"}h → Active: $isActiveCustom');
-    
+    print(
+      '   Standard parsing: Start ${standardStart.hour}h, End ${standardEnd.hour}h → Active: $isActiveStandard',
+    );
+    print(
+      '   Custom parsing: Start ${customStart?.hour ?? "N/A"}h, End ${customEnd?.hour ?? "N/A"}h → Active: $isActiveCustom',
+    );
+
     print('\n💡 IMPORTANT: Our implementation now ignores the Z suffix');
     print('💡 All times are treated as local time regardless of Z suffix');
-    print('💡 This ensures consistent time comparison in Bangladesh timezone (GMT+6)');
+    print(
+      '💡 This ensures consistent time comparison in Bangladesh timezone (GMT+6)',
+    );
     print('\n');
   } catch (e) {
     print('❌ Error logging timezone debug info: $e');
@@ -253,7 +271,7 @@ class MyApp extends StatelessWidget {
 
   Future<bool> checkUserIsLogin() async {
     MyProfileModel? response = await Repository.getMyProfile();
-    return response?.data?.isVerified??false;
+    return response?.data?.isVerified ?? false;
   }
 
   @override
@@ -268,11 +286,7 @@ class MyApp extends StatelessWidget {
       // Prevent multiple navigators
       unknownRoute: GetPage(
         name: '/notfound',
-        page: () => const Scaffold(
-          body: Center(
-            child: Text('Page Not Found'),
-          ),
-        ),
+        page: () => const Scaffold(body: Center(child: Text('Page Not Found'))),
       ),
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
@@ -282,13 +296,15 @@ class MyApp extends StatelessWidget {
         hoverColor: Colors.transparent,
         // Use system font initially, Google Fonts will load in background
         fontFamily: 'Roboto',
-        textSelectionTheme: const TextSelectionThemeData(selectionHandleColor: Colors.white),
+        textSelectionTheme: const TextSelectionThemeData(
+          selectionHandleColor: Colors.white,
+        ),
       ),
       builder: (context, child) {
         final data = MediaQuery.of(context);
         return MediaQuery(
-          data: data.copyWith(textScaler: const TextScaler.linear(1)), 
-          child: child ?? const SizedBox()
+          data: data.copyWith(textScaler: const TextScaler.linear(1)),
+          child: child ?? const SizedBox(),
         );
       },
     );

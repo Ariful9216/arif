@@ -1,3 +1,9 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:arif_mart/core/constants/colors/app_colors.dart';
+import 'package:arif_mart/core/model/product_model.dart';
+import 'package:arif_mart/src/screens/Service/shoping/widgets/wishlist_heart_icon.dart';
+
 // Simple Product Card Widget with Flash Sale Support
 class SimpleProductCard extends StatelessWidget {
   final ProductData product;
