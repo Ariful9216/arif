@@ -26,3 +26,8 @@
 
 # Optional: Keep all public classes
 -keep class * { public *; }
+
+# Apache Commons Imaging - Ignore missing Java AWT classes (not available on Android)
+-dontwarn java.awt.**
+-dontwarn javax.imageio.**
+-dontwarn org.apache.commons.imaging.**
