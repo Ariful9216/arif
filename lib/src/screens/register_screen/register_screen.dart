@@ -135,7 +135,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       onPressed: () => controller.onTapRegister(_formKey),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primaryColor,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         padding: const EdgeInsets.symmetric(vertical: 16),
                       ),
                       child: const Text('Register', style: TextStyle(color: Colors.white, fontSize: 16)),

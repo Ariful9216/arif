@@ -47,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       controller: controller.phoneController,
                       keyboardType: TextInputType.phone,
                       validator: (value) => Validators.validateRequired(controller.phoneController.text, "Phone Number"),
-                      decoration: InputDecoration(hintText: 'Phone', prefixIcon: const Icon(Icons.phone), border: OutlineInputBorder(borderRadius: BorderRadius.circular(50))),
+                      decoration: InputDecoration(hintText: 'Phone', prefixIcon: const Icon(Icons.phone), border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
                     ),
                     const SizedBox(height: 16),
 
@@ -63,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             icon: Icon(controller.obscurePassword.value ? Icons.visibility_off : Icons.visibility),
                             onPressed: controller.togglePasswordVisibility,
                           ),
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(50)),
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                         ),
                       ),
                     ),
@@ -124,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: () => controller.login(_formKey),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primaryColor,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         padding: const EdgeInsets.symmetric(vertical: 16),
                       ),
                       child: const Text('Login', style: TextStyle(color: Colors.white, fontSize: 16)),
@@ -136,7 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: OutlinedButton.styleFrom(
                         foregroundColor: AppColors.primaryColor,
                         side: BorderSide(color: AppColors.primaryColor),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         padding: const EdgeInsets.symmetric(vertical: 16),
                       ),
                       child: const Text('Create an Account', style: TextStyle(fontSize: 16)),
