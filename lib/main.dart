@@ -16,6 +16,7 @@ import 'package:arif_mart/core/services/address_service.dart';
 import 'package:arif_mart/core/services/order_service.dart';
 import 'package:arif_mart/core/services/rated_products_service.dart';
 import 'package:arif_mart/core/services/deep_link_service.dart';
+import 'package:arif_mart/core/services/in_app_update_service.dart';
 import 'package:arif_mart/core/utils/timezone_util.dart';
 import 'package:arif_mart/src/screens/Service/shoping/wishlist/controller/wishlist_controller.dart';
 import 'package:arif_mart/src/screens/Service/shoping/controller/shopping_controller.dart';
@@ -98,6 +99,9 @@ Future<void> main() async {
 
   // Verify login status in background (non-blocking)
   _verifyLoginStatusInBackground();
+
+  // Check for app updates in background (non-blocking)
+  _checkForUpdatesInBackground();
 }
 
 // Initialize Firebase synchronously
@@ -183,6 +187,15 @@ void _verifyLoginStatusInBackground() async {
     }
   } catch (e) {
     print('❌ Error verifying login status: $e');
+  }
+}
+
+// Check for app updates in background
+void _checkForUpdatesInBackground() async {
+  try {
+    await Get.putAsync(() => InAppUpdateService().init());
+  } catch (e) {
+    print('❌ Error initializing update service: $e');
   }
 }
 

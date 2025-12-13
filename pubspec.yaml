@@ -53,6 +53,7 @@ dependencies:
   gal: ^2.3.0
   permission_handler: ^11.3.1
   path_provider: ^2.1.5
+  in_app_update: ^4.2.4
 #  uddoktapay: ^0.0.4
 
 dev_dependencies:
