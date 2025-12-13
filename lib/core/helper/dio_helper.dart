@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:dio/dio.dart' as diox;
@@ -13,7 +12,6 @@ import '../constants/api.dart';
 import '../constants/routes/routes.dart';
 import 'hive_helper.dart';
 
-
 final logger = Logger();
 
 class DioApiHelper {
@@ -21,9 +19,14 @@ class DioApiHelper {
   final diox.Dio dio = diox.Dio();
 
   DioApiHelper({bool? isTokeNeeded}) {
-    header = isTokeNeeded == false
-        ? {'Content-Type': 'application/json', 'Accept': 'application/json'}
-        : {'Content-Type': 'application/json', 'Authorization': 'Bearer ${HiveHelper.getToken}', 'Accept': 'application/json'};
+    header =
+        isTokeNeeded == false
+            ? {'Content-Type': 'application/json', 'Accept': 'application/json'}
+            : {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ${HiveHelper.getToken}',
+              'Accept': 'application/json',
+            };
 
     // Configure Dio timeouts
     dio.options.connectTimeout = const Duration(seconds: 30);
@@ -31,16 +34,26 @@ class DioApiHelper {
     dio.options.sendTimeout = const Duration(seconds: 30);
   }
 
-  Future<dynamic> post({required String url, required Map<String, dynamic> body}) async {
+  Future<dynamic> post({
+    required String url,
+    required Map<String, dynamic> body,
+  }) async {
     try {
-      diox.Response response = await dio.post(Apis.baseUrl + url, options: diox.Options(headers: header), data: body);
+      diox.Response response = await dio.post(
+        Apis.baseUrl + url,
+        options: diox.Options(headers: header),
+        data: body,
+      );
       logger.i(
-          "StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nBody : ${response.requestOptions.data} \nResponse : ${jsonEncode(response.data)}");
+        "StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nBody : ${response.requestOptions.data} \nResponse : ${jsonEncode(response.data)}",
+      );
       Loader.closeLoader();
       return response.data;
     } on diox.DioException catch (e) {
       Loader.closeLoader();
-      logger.e("StatusCode : ${e.response?.statusCode} \nApi : ${e.requestOptions.uri} \nBody : ${e.requestOptions.data} \nResponse : ${e.response?.data}");
+      logger.e(
+        "StatusCode : ${e.response?.statusCode} \nApi : ${e.requestOptions.uri} \nBody : ${e.requestOptions.data} \nResponse : ${e.response?.data}",
+      );
       // if (e.response?.statusCode == 401) {
       //   // HiveHelper.clearHive();
       //   bool sessionExtended = await extendSession();
@@ -52,7 +65,9 @@ class DioApiHelper {
       // }
       if (e.response?.data['message'] != null) {
         if (e.response?.statusCode == 400 || e.response?.statusCode == 403) {
-          showToast(e.response?.data['message'].toString() ?? 'Something went to wrong');
+          showToast(
+            e.response?.data['message'].toString() ?? 'Something went to wrong',
+          );
         } else if (e.response?.statusCode == 401) {
           // Silent redirect to login - do not show toast to user when unauthorized
           logger.w("401 Unauthorized - silently redirecting to login");
@@ -71,17 +86,21 @@ class DioApiHelper {
     }
   }
 
-  Future<dynamic> get({required String url, bool? showErrorToast = true, Map<String, dynamic>? body, bool? addBaseUrl = true}) async {
+  Future<dynamic> get({
+    required String url,
+    bool? showErrorToast = true,
+    Map<String, dynamic>? body,
+    bool? addBaseUrl = true,
+  }) async {
     try {
       diox.Response response = await dio.get(
         '${addBaseUrl == true ? Apis.baseUrl : ""}$url',
         data: body,
-        options: diox.Options(
-          headers: header,
-        ),
+        options: diox.Options(headers: header),
       );
       logger.i(
-          "StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nBody : ${response.requestOptions.data} \nResponse : ${jsonEncode(response.data)} \nHeader : ${jsonEncode(response.requestOptions.headers)}");
+        "StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nBody : ${response.requestOptions.data} \nResponse : ${jsonEncode(response.data)} \nHeader : ${jsonEncode(response.requestOptions.headers)}",
+      );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         Loader.closeLoader();
@@ -95,16 +114,17 @@ class DioApiHelper {
     } on diox.DioException catch (e) {
       Loader.closeLoader();
       logger.e(
-          "StatusCode : ${e.response?.statusCode} \nApi : ${e.response?.requestOptions.uri} \nBody : ${e.response?.requestOptions.data} \nResponse : ${jsonEncode(e.response?.data)} \nHeader : ${jsonEncode(e.response?.requestOptions.headers)}");
+        "StatusCode : ${e.response?.statusCode} \nApi : ${e.response?.requestOptions.uri} \nBody : ${e.response?.requestOptions.data} \nResponse : ${jsonEncode(e.response?.data)} \nHeader : ${jsonEncode(e.response?.requestOptions.headers)}",
+      );
 
       if (e.response?.statusCode == 401) {
         Get.log("++++++++++++++++++++++++++++++++++++++++401");
-        
+
         // Check if this is a subscription error and handle it
         if (SubscriptionErrorHandler.handleSubscriptionError(e)) {
           return null; // Subscription popup shown, return null
         }
-        
+
         // HiveHelper.clearHive();
         bool sessionExtended = await extendSession();
         if (sessionExtended) {
@@ -117,7 +137,9 @@ class DioApiHelper {
             Get.offAllNamed(Routes.login);
           } else {
             // During app initialization, just clear data and let main.dart handle routing
-            logger.e("Authentication failed during app initialization - will redirect to login");
+            logger.e(
+              "Authentication failed during app initialization - will redirect to login",
+            );
             await _clearAuthenticationData();
           }
         }
@@ -127,22 +149,33 @@ class DioApiHelper {
       if (e.response?.statusCode == 404) {
         String? errorMessage = e.response?.data?['message']?.toString();
         // Don't show toast or throw error for "not found" responses on optional data
-        if (errorMessage != null && (errorMessage.contains('No sliders found') || 
-            errorMessage.contains('No banners found') ||
-            errorMessage.contains('not found'))) {
-          Get.log("ℹ️ Optional data not found (404): $errorMessage - returning null");
+        if (errorMessage != null &&
+            (errorMessage.contains('No sliders found') ||
+                errorMessage.contains('No banners found') ||
+                errorMessage.contains('not found'))) {
+          Get.log(
+            "ℹ️ Optional data not found (404): $errorMessage - returning null",
+          );
           return null;
         }
       }
 
-      if (e.response?.data['message'] != null && e.response?.data['message'].runtimeType == String) {
+      if (e.response?.data['message'] != null &&
+          e.response?.data['message'].runtimeType == String) {
         if (e.response?.statusCode == 400 || e.response?.statusCode == 403) {
           if (showErrorToast == true) {
-            showToast(e.response?.data['message'].toString() ?? 'Something went to wrong');
+            showToast(
+              e.response?.data['message'].toString() ??
+                  'Something went to wrong',
+            );
           }
-        } else if (e.response?.statusCode != 404 && e.response?.statusCode != 401) {  // Don't show toast for 404 or 401
+        } else if (e.response?.statusCode != 404 &&
+            e.response?.statusCode != 401) {
+          // Don't show toast for 404 or 401
           if (showErrorToast == true) {
-            showToast(e.response?.data['message']?.toString() ?? 'Something went wrong');
+            showToast(
+              e.response?.data['message']?.toString() ?? 'Something went wrong',
+            );
           }
         }
       } else {
@@ -169,16 +202,17 @@ class DioApiHelper {
 
       diox.Response response = await dio.post(
         "${Apis.baseUrl}/api/token/refresh/",
-        options: diox.Options(headers: {
-          'Content-Type': 'application/json',
-        }),
+        options: diox.Options(headers: {'Content-Type': 'application/json'}),
         data: jsonEncode({"refresh": refreshToken}),
       );
 
-      logger.i("🔄 Refresh API Response: ${response.statusCode} - ${response.data}");
+      logger.i(
+        "🔄 Refresh API Response: ${response.statusCode} - ${response.data}",
+      );
 
       Get.log(
-          "StatusCode: ${response.statusCode} \nAPI: ${response.requestOptions.uri} \nBody: ${jsonEncode(response.requestOptions.data)} \nResponse: ${jsonEncode(response.data)} \nHeader: ${jsonEncode(response.requestOptions.headers)}");
+        "StatusCode: ${response.statusCode} \nAPI: ${response.requestOptions.uri} \nBody: ${jsonEncode(response.requestOptions.data)} \nResponse: ${jsonEncode(response.data)} \nHeader: ${jsonEncode(response.requestOptions.headers)}",
+      );
       String newToken = response.data['access'];
       String refreshNewToken = response.data['refresh'];
       await HiveHelper.setAccessToken(newToken);
@@ -210,7 +244,11 @@ class DioApiHelper {
     return false;
   }
 
-  Future<dynamic> retryRequest(String url, Map<String, dynamic>? body, bool? addBaseUrl) async {
+  Future<dynamic> retryRequest(
+    String url,
+    Map<String, dynamic>? body,
+    bool? addBaseUrl,
+  ) async {
     Get.log("++++++++++++++++++++++++++++++++++++++++retryRequest");
     try {
       diox.Response response = await dio.get(
@@ -225,20 +263,30 @@ class DioApiHelper {
     }
   }
 
-  Future<dynamic> put({required String url, required Map<String, dynamic> body}) async {
+  Future<dynamic> put({
+    required String url,
+    required Map<String, dynamic> body,
+  }) async {
     try {
-      diox.Response response = await dio.put(Apis.baseUrl + url, options: diox.Options(headers: header), data: body);
+      diox.Response response = await dio.put(
+        Apis.baseUrl + url,
+        options: diox.Options(headers: header),
+        data: body,
+      );
       logger.i(
-          "StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nBody : ${response.requestOptions.data} \nResponse : ${jsonEncode(response.data)} \nHeader : ${jsonEncode(response.headers)}");
+        "StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nBody : ${response.requestOptions.data} \nResponse : ${jsonEncode(response.data)} \nHeader : ${jsonEncode(response.headers)}",
+      );
       if (response.data["success"] == true) {
         logger.i(
-            "StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nBody : ${response.requestOptions.data} \nResponse : ${jsonEncode(response.data)} \nHeader : ${jsonEncode(response.headers)}");
+          "StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nBody : ${response.requestOptions.data} \nResponse : ${jsonEncode(response.data)} \nHeader : ${jsonEncode(response.headers)}",
+        );
         Loader.closeLoader();
         return response.data;
       } else {
         Loader.closeLoader();
         logger.e(
-            "StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nBody : ${response.requestOptions.data} \nResponse : ${response.data} \nHeader : ${response.headers}");
+          "StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nBody : ${response.requestOptions.data} \nResponse : ${response.data} \nHeader : ${response.headers}",
+        );
         if (response.data['message'] != null) {
           showToast(response.data['message'].toString());
         } else {
@@ -247,10 +295,14 @@ class DioApiHelper {
       }
     } on diox.DioException catch (e) {
       Loader.closeLoader();
-      Get.log("StatusCode : ${e.response?.statusCode} \nApi : ${e.requestOptions.uri} \nBody : ${e.requestOptions.data} \nResponse : ${e.response?.data} ");
+      Get.log(
+        "StatusCode : ${e.response?.statusCode} \nApi : ${e.requestOptions.uri} \nBody : ${e.requestOptions.data} \nResponse : ${e.response?.data} ",
+      );
       if (e.response?.data['message'] != null) {
         if (e.response?.statusCode == 400 || e.response?.statusCode == 403) {
-          showToast(e.response?.data['message'].toString() ?? 'Something went to wrong');
+          showToast(
+            e.response?.data['message'].toString() ?? 'Something went to wrong',
+          );
         } else if (e.response?.statusCode == 401) {
           HiveHelper.clearHive();
           Get.offAllNamed(Routes.login);
@@ -320,8 +372,7 @@ class DioApiHelper {
   Future<dynamic> patch({
     required String url,
     required Map<String, dynamic> body,
-  })
-  async {
+  }) async {
     try {
       diox.Response response = await dio.patch(
         Apis.baseUrl + url,
@@ -366,7 +417,9 @@ class DioApiHelper {
 
       if (e.response?.data['message'] != null) {
         if (e.response?.statusCode == 400 || e.response?.statusCode == 403) {
-          showToast(e.response?.data['message'].toString() ?? 'Something went wrong');
+          showToast(
+            e.response?.data['message'].toString() ?? 'Something went wrong',
+          );
         } else if (e.response?.statusCode == 401) {
           // ✅ Ensure extendSession() returns a boolean
           bool sessionExtended = await extendSession();
@@ -387,7 +440,11 @@ class DioApiHelper {
     return null;
   }
 
-  Future<dynamic> delete({required String url, Map<String, dynamic>? body, bool? addBaseUrl}) async {
+  Future<dynamic> delete({
+    required String url,
+    Map<String, dynamic>? body,
+    bool? addBaseUrl,
+  }) async {
     try {
       diox.Response response = await dio.delete(
         Apis.baseUrl + url,
@@ -395,16 +452,20 @@ class DioApiHelper {
         data: body,
       );
       logger.i(
-          "StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nBody : ${response.requestOptions.data} \nResponse : ${jsonEncode(response.data)}");
-      if (response.data["message"] == "Activity has been soft deleted successfully.") {
+        "StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nBody : ${response.requestOptions.data} \nResponse : ${jsonEncode(response.data)}",
+      );
+      if (response.data["message"] ==
+          "Activity has been soft deleted successfully.") {
         logger.i(
-            "StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nBody : ${response.requestOptions.data} \nResponse : ${jsonEncode(response.data)}");
+          "StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nBody : ${response.requestOptions.data} \nResponse : ${jsonEncode(response.data)}",
+        );
         Loader.closeLoader();
         return response.data;
       } else {
         Loader.closeLoader();
         logger.e(
-            "StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nBody : ${response.requestOptions.data} \nResponse : ${response.data}");
+          "StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nBody : ${response.requestOptions.data} \nResponse : ${response.data}",
+        );
         if (response.data['message'] != null) {
           // showToast(response.data['message'].toString());
         } else {
@@ -413,10 +474,14 @@ class DioApiHelper {
       }
     } on diox.DioException catch (e) {
       Loader.closeLoader();
-      logger.e("StatusCode : ${e.response?.statusCode} \nApi : ${e.requestOptions.uri} \nBody : ${e.requestOptions.data} \nResponse : ${e.response?.data}");
+      logger.e(
+        "StatusCode : ${e.response?.statusCode} \nApi : ${e.requestOptions.uri} \nBody : ${e.requestOptions.data} \nResponse : ${e.response?.data}",
+      );
       if (e.response?.data['message'] != null) {
         if (e.response?.statusCode == 400) {
-          showToast(e.response?.data['message'].toString() ?? 'Something went to wrong');
+          showToast(
+            e.response?.data['message'].toString() ?? 'Something went to wrong',
+          );
         } else if (e.response?.statusCode == 401) {
           // HiveHelper.clearHive();
           bool sessionExtended = await extendSession();
@@ -438,21 +503,34 @@ class DioApiHelper {
     return null;
   }
 
-  Future<Map<String, dynamic>?> multipartPost({required diox.FormData data, required String url, String? method}) async {
+  Future<Map<String, dynamic>?> multipartPost({
+    required diox.FormData data,
+    required String url,
+    String? method,
+  }) async {
     try {
-      diox.Response response = await dio.request('${Apis.baseUrl}$url', options: diox.Options(method: method ?? 'POST', headers: header), data: data);
+      diox.Response response = await dio.request(
+        '${Apis.baseUrl}$url',
+        options: diox.Options(method: method ?? 'POST', headers: header),
+        data: data,
+      );
       logger.i(
-          "StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nBody : ${response.requestOptions.data} \nResponse : ${jsonEncode(response.data)} \nHeader : ${jsonEncode(response.requestOptions.headers)}");
+        "StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nBody : ${response.requestOptions.data} \nResponse : ${jsonEncode(response.data)} \nHeader : ${jsonEncode(response.requestOptions.headers)}",
+      );
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response.data;
       }
     } on diox.DioException catch (e) {
       logger.i(
-          "StatusCode : ${e.response?.statusCode} \nApi : ${e.response?.requestOptions.uri} \nBody : ${e.response?.requestOptions.data} \nResponse : ${jsonEncode(e.response?.data)} \nHeader : ${jsonEncode(e.response?.requestOptions.headers)}");
-      if (e.response?.data != null && e.response?.data is Map<String, dynamic>) {
-        Map<String, dynamic> errorData = e.response?.data as Map<String, dynamic>;
+        "StatusCode : ${e.response?.statusCode} \nApi : ${e.response?.requestOptions.uri} \nBody : ${e.response?.requestOptions.data} \nResponse : ${jsonEncode(e.response?.data)} \nHeader : ${jsonEncode(e.response?.requestOptions.headers)}",
+      );
+      if (e.response?.data != null &&
+          e.response?.data is Map<String, dynamic>) {
+        Map<String, dynamic> errorData =
+            e.response?.data as Map<String, dynamic>;
 
-        if (errorData.containsKey('message') && errorData['message'] is String) {
+        if (errorData.containsKey('message') &&
+            errorData['message'] is String) {
           showToast(errorData['message']);
         } else {
           for (var entry in errorData.entries) {
@@ -506,7 +584,7 @@ class DioApiHelper {
   Future<void> _clearAuthenticationData() async {
     try {
       await HiveHelper.setToken(null);
-      await HiveHelper.setRefreshToken(null); 
+      await HiveHelper.setRefreshToken(null);
       await HiveHelper.setIsLogin(false);
       logger.i("Authentication data cleared due to session expiry");
     } catch (e) {
@@ -521,9 +599,14 @@ class EcommerceDioHelper {
   final diox.Dio dio = diox.Dio();
 
   EcommerceDioHelper({bool? isTokenNeeded}) {
-    header = isTokenNeeded == false
-        ? {'Content-Type': 'application/json', 'Accept': 'application/json'}
-        : {'Content-Type': 'application/json', 'Authorization': 'Bearer ${HiveHelper.getToken}', 'Accept': 'application/json'};
+    header =
+        isTokenNeeded == false
+            ? {'Content-Type': 'application/json', 'Accept': 'application/json'}
+            : {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ${HiveHelper.getToken}',
+              'Accept': 'application/json',
+            };
 
     // Configure Dio timeouts
     dio.options.connectTimeout = const Duration(seconds: 30);
@@ -531,20 +614,34 @@ class EcommerceDioHelper {
     dio.options.sendTimeout = const Duration(seconds: 30);
   }
 
-  Future<dynamic> post({required String url, required Map<String, dynamic> body}) async {
+  Future<dynamic> post({
+    required String url,
+    required Map<String, dynamic> body,
+  }) async {
     try {
-      diox.Response response = await dio.post(Apis.ecommerceBaseUrl + url, options: diox.Options(headers: header), data: body);
+      diox.Response response = await dio.post(
+        Apis.ecommerceBaseUrl + url,
+        options: diox.Options(headers: header),
+        data: body,
+      );
       logger.i(
-          "StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nBody : ${response.requestOptions.data} \nResponse : ${jsonEncode(response.data)}");
+        "StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nBody : ${response.requestOptions.data} \nResponse : ${jsonEncode(response.data)}",
+      );
       return response.data;
     } on diox.DioException catch (e) {
-      logger.e("StatusCode : ${e.response?.statusCode} \nApi : ${e.requestOptions.uri} \nBody : ${e.requestOptions.data} \nResponse : ${e.response?.data}");
+      logger.e(
+        "StatusCode : ${e.response?.statusCode} \nApi : ${e.requestOptions.uri} \nBody : ${e.requestOptions.data} \nResponse : ${e.response?.data}",
+      );
       if (e.response?.data['message'] != null) {
         if (e.response?.statusCode == 400 || e.response?.statusCode == 403) {
-          showToast(e.response?.data['message'].toString() ?? 'Something went wrong');
+          showToast(
+            e.response?.data['message'].toString() ?? 'Something went wrong',
+          );
         } else if (e.response?.statusCode == 401) {
           // Silent redirect to login - do not show toast when unauthorized
-          logger.w("401 Unauthorized (Ecommerce) - silently redirecting to login");
+          logger.w(
+            "401 Unauthorized (Ecommerce) - silently redirecting to login",
+          );
           if (Get.context != null) {
             Get.offAllNamed(Routes.login);
           }
@@ -554,88 +651,133 @@ class EcommerceDioHelper {
     }
   }
 
-  Future<dynamic> get({required String url, bool? showErrorToast = true, Map<String, dynamic>? body}) async {
+  Future<dynamic> get({
+    required String url,
+    bool? showErrorToast = true,
+    Map<String, dynamic>? body,
+  }) async {
     try {
       diox.Response response = await dio.get(
         '${Apis.ecommerceBaseUrl}$url',
         options: diox.Options(headers: header),
         queryParameters: body,
       );
-      logger.i("StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nResponse : ${jsonEncode(response.data)}");
+      logger.i(
+        "StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nResponse : ${jsonEncode(response.data)}",
+      );
       return response.data;
     } on diox.DioException catch (e) {
-      logger.e("StatusCode : ${e.response?.statusCode} \nApi : ${e.requestOptions.uri} \nResponse : ${e.response?.data}");
+      logger.e(
+        "StatusCode : ${e.response?.statusCode} \nApi : ${e.requestOptions.uri} \nResponse : ${e.response?.data}",
+      );
       if (e.response?.statusCode == 401) {
         // Silent redirect to login - do not show toast when unauthorized
-        logger.w("401 Unauthorized (Ecommerce GET) - silently redirecting to login");
+        logger.w(
+          "401 Unauthorized (Ecommerce GET) - silently redirecting to login",
+        );
         if (Get.context != null) {
           Get.offAllNamed(Routes.login);
         }
-      } else if (showErrorToast == true && e.response?.data['message'] != null) {
+      } else if (showErrorToast == true &&
+          e.response?.data['message'] != null) {
         if (e.response?.statusCode == 400 || e.response?.statusCode == 403) {
-          showToast(e.response?.data['message'].toString() ?? 'Something went wrong');
+          showToast(
+            e.response?.data['message'].toString() ?? 'Something went wrong',
+          );
         }
       }
       rethrow;
     }
   }
 
-  Future<dynamic> put({required String url, required Map<String, dynamic> body}) async {
+  Future<dynamic> put({
+    required String url,
+    required Map<String, dynamic> body,
+  }) async {
     try {
-      diox.Response response = await dio.put(Apis.ecommerceBaseUrl + url, options: diox.Options(headers: header), data: body);
+      diox.Response response = await dio.put(
+        Apis.ecommerceBaseUrl + url,
+        options: diox.Options(headers: header),
+        data: body,
+      );
       logger.i(
-          "StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nBody : ${response.requestOptions.data} \nResponse : ${jsonEncode(response.data)}");
+        "StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nBody : ${response.requestOptions.data} \nResponse : ${jsonEncode(response.data)}",
+      );
       return response.data;
     } on diox.DioException catch (e) {
-      logger.e("StatusCode : ${e.response?.statusCode} \nApi : ${e.requestOptions.uri} \nBody : ${e.requestOptions.data} \nResponse : ${e.response?.data}");
+      logger.e(
+        "StatusCode : ${e.response?.statusCode} \nApi : ${e.requestOptions.uri} \nBody : ${e.requestOptions.data} \nResponse : ${e.response?.data}",
+      );
       if (e.response?.data['message'] != null) {
-        showToast(e.response?.data['message'].toString() ?? 'Something went wrong');
+        showToast(
+          e.response?.data['message'].toString() ?? 'Something went wrong',
+        );
       }
       rethrow;
     }
   }
 
-  Future<dynamic> delete({required String url, Map<String, dynamic>? body}) async {
+  Future<dynamic> delete({
+    required String url,
+    Map<String, dynamic>? body,
+  }) async {
     try {
       diox.Response response = await dio.delete(
         Apis.ecommerceBaseUrl + url,
         options: diox.Options(headers: header),
         data: body,
       );
-      logger.i("StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nResponse : ${jsonEncode(response.data)}");
+      logger.i(
+        "StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nResponse : ${jsonEncode(response.data)}",
+      );
       return response.data;
     } on diox.DioException catch (e) {
-      logger.e("StatusCode : ${e.response?.statusCode} \nApi : ${e.requestOptions.uri} \nResponse : ${e.response?.data}");
+      logger.e(
+        "StatusCode : ${e.response?.statusCode} \nApi : ${e.requestOptions.uri} \nResponse : ${e.response?.data}",
+      );
       print("EcommerceDioHelper DELETE error: $e");
       print("Server response data: ${e.response?.data}");
       print("Server response status: ${e.response?.statusCode}");
       if (e.response?.data != null && e.response?.data['message'] != null) {
-        showToast(e.response?.data['message'].toString() ?? 'Something went wrong');
+        showToast(
+          e.response?.data['message'].toString() ?? 'Something went wrong',
+        );
       }
       rethrow;
     }
   }
 
-  Future<dynamic> patch({required String url, required Map<String, dynamic> body}) async {
+  Future<dynamic> patch({
+    required String url,
+    required Map<String, dynamic> body,
+  }) async {
     try {
       diox.Response response = await dio.patch(
         Apis.ecommerceBaseUrl + url,
         options: diox.Options(headers: header),
         data: body,
       );
-      logger.i("StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nBody : ${response.requestOptions.data} \nResponse : ${jsonEncode(response.data)}");
+      logger.i(
+        "StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nBody : ${response.requestOptions.data} \nResponse : ${jsonEncode(response.data)}",
+      );
       return response.data;
     } on diox.DioException catch (e) {
-      logger.e("StatusCode : ${e.response?.statusCode} \nApi : ${e.requestOptions.uri} \nBody : ${e.requestOptions.data} \nResponse : ${e.response?.data}");
+      logger.e(
+        "StatusCode : ${e.response?.statusCode} \nApi : ${e.requestOptions.uri} \nBody : ${e.requestOptions.data} \nResponse : ${e.response?.data}",
+      );
       if (e.response?.statusCode == 401) {
         // Silent redirect to login - do not show toast when unauthorized
-        logger.w("401 Unauthorized (Ecommerce PATCH) - silently redirecting to login");
+        logger.w(
+          "401 Unauthorized (Ecommerce PATCH) - silently redirecting to login",
+        );
         if (Get.context != null) {
           Get.offAllNamed(Routes.login);
         }
       } else if (e.response?.data['message'] != null) {
         if (e.response?.statusCode == 400 || e.response?.statusCode == 403) {
-          showToast(e.response?.data['message'].toString() ?? 'Something went wrong');
+          showToast(
+            e.response?.data['message'].toString() ?? 'Something went wrong',
+          );
         }
       }
       rethrow;
@@ -648,9 +790,14 @@ class RechargeDioHelper {
   final diox.Dio dio = diox.Dio();
 
   RechargeDioHelper({bool? isTokenNeeded}) {
-    header = isTokenNeeded == false
-        ? {'Content-Type': 'application/json', 'Accept': 'application/json'}
-        : {'Content-Type': 'application/json', 'Authorization': 'Bearer ${HiveHelper.getToken}', 'Accept': 'application/json'};
+    header =
+        isTokenNeeded == false
+            ? {'Content-Type': 'application/json', 'Accept': 'application/json'}
+            : {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ${HiveHelper.getToken}',
+              'Accept': 'application/json',
+            };
 
     // Configure Dio timeouts
     dio.options.connectTimeout = const Duration(seconds: 30);
@@ -658,23 +805,37 @@ class RechargeDioHelper {
     dio.options.sendTimeout = const Duration(seconds: 30);
   }
 
-  Future<dynamic> post({required String url, required Map<String, dynamic> body}) async {
+  Future<dynamic> post({
+    required String url,
+    required Map<String, dynamic> body,
+  }) async {
     try {
-      diox.Response response = await dio.post(Apis.rechargeBaseUrl + url, options: diox.Options(headers: header), data: body);
+      diox.Response response = await dio.post(
+        Apis.rechargeBaseUrl + url,
+        options: diox.Options(headers: header),
+        data: body,
+      );
       logger.i(
-          "StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nBody : ${response.requestOptions.data} \nResponse : ${jsonEncode(response.data)}");
+        "StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nBody : ${response.requestOptions.data} \nResponse : ${jsonEncode(response.data)}",
+      );
       return response.data;
     } on diox.DioException catch (e) {
-      logger.e("StatusCode : ${e.response?.statusCode} \nApi : ${e.requestOptions.uri} \nBody : ${e.response?.data} \nResponse : ${e.response?.data}");
+      logger.e(
+        "StatusCode : ${e.response?.statusCode} \nApi : ${e.requestOptions.uri} \nBody : ${e.response?.data} \nResponse : ${e.response?.data}",
+      );
       if (e.response?.statusCode == 401) {
         // Silent redirect to login - do not show toast when unauthorized
-        logger.w("401 Unauthorized (Recharge POST) - silently redirecting to login");
+        logger.w(
+          "401 Unauthorized (Recharge POST) - silently redirecting to login",
+        );
         if (Get.context != null) {
           Get.offAllNamed(Routes.login);
         }
       } else if (e.response?.data['message'] != null) {
         if (e.response?.statusCode == 400 || e.response?.statusCode == 403) {
-          showToast(e.response?.data['message'].toString() ?? 'Something went wrong');
+          showToast(
+            e.response?.data['message'].toString() ?? 'Something went wrong',
+          );
         }
       }
       rethrow;
@@ -683,12 +844,18 @@ class RechargeDioHelper {
 
   Future<dynamic> get({required String url}) async {
     try {
-      diox.Response response = await dio.get(Apis.rechargeBaseUrl + url, options: diox.Options(headers: header));
+      diox.Response response = await dio.get(
+        Apis.rechargeBaseUrl + url,
+        options: diox.Options(headers: header),
+      );
       logger.i(
-          "StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nResponse : ${jsonEncode(response.data)}");
+        "StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nResponse : ${jsonEncode(response.data)}",
+      );
       return response.data;
     } on diox.DioException catch (e) {
-      logger.e("StatusCode : ${e.response?.statusCode} \nApi : ${e.requestOptions.uri} \nResponse : ${e.response?.data}");
+      logger.e(
+        "StatusCode : ${e.response?.statusCode} \nApi : ${e.requestOptions.uri} \nResponse : ${e.response?.data}",
+      );
 
       // Check if this is a subscription error and handle it
       if (SubscriptionErrorHandler.handleSubscriptionError(e)) {
@@ -697,27 +864,41 @@ class RechargeDioHelper {
 
       if (e.response?.statusCode == 401) {
         // Silent redirect to login - do not show toast when unauthorized
-        logger.w("401 Unauthorized (Recharge GET) - silently redirecting to login");
+        logger.w(
+          "401 Unauthorized (Recharge GET) - silently redirecting to login",
+        );
         if (Get.context != null) {
           Get.offAllNamed(Routes.login);
         }
       } else if (e.response?.data['message'] != null) {
         if (e.response?.statusCode == 400 || e.response?.statusCode == 403) {
-          showToast(e.response?.data['message'].toString() ?? 'Something went wrong');
+          showToast(
+            e.response?.data['message'].toString() ?? 'Something went wrong',
+          );
         }
       }
       rethrow;
     }
   }
 
-  Future<dynamic> put({required String url, required Map<String, dynamic> body}) async {
+  Future<dynamic> put({
+    required String url,
+    required Map<String, dynamic> body,
+  }) async {
     try {
-      diox.Response response = await dio.put(Apis.rechargeBaseUrl + url, options: diox.Options(headers: header), data: body);
+      diox.Response response = await dio.put(
+        Apis.rechargeBaseUrl + url,
+        options: diox.Options(headers: header),
+        data: body,
+      );
       logger.i(
-          "StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nBody : ${response.requestOptions.data} \nResponse : ${jsonEncode(response.data)}");
+        "StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nBody : ${response.requestOptions.data} \nResponse : ${jsonEncode(response.data)}",
+      );
       return response.data;
     } on diox.DioException catch (e) {
-      logger.e("StatusCode : ${e.response?.statusCode} \nApi : ${e.requestOptions.uri} \nBody : ${e.response?.data} \nResponse : ${e.response?.data}");
+      logger.e(
+        "StatusCode : ${e.response?.statusCode} \nApi : ${e.requestOptions.uri} \nBody : ${e.response?.data} \nResponse : ${e.response?.data}",
+      );
 
       // Check if this is a subscription error and handle it
       if (SubscriptionErrorHandler.handleSubscriptionError(e)) {
@@ -726,36 +907,54 @@ class RechargeDioHelper {
 
       if (e.response?.statusCode == 401) {
         // Silent redirect to login - do not show toast when unauthorized
-        logger.w("401 Unauthorized (Recharge PUT) - silently redirecting to login");
+        logger.w(
+          "401 Unauthorized (Recharge PUT) - silently redirecting to login",
+        );
         if (Get.context != null) {
           Get.offAllNamed(Routes.login);
         }
       } else if (e.response?.data['message'] != null) {
         if (e.response?.statusCode == 400 || e.response?.statusCode == 403) {
-          showToast(e.response?.data['message'].toString() ?? 'Something went wrong');
+          showToast(
+            e.response?.data['message'].toString() ?? 'Something went wrong',
+          );
         }
       }
       rethrow;
     }
   }
 
-  Future<dynamic> patch({required String url, required Map<String, dynamic> body}) async {
+  Future<dynamic> patch({
+    required String url,
+    required Map<String, dynamic> body,
+  }) async {
     try {
-      diox.Response response = await dio.patch(Apis.rechargeBaseUrl + url, options: diox.Options(headers: header), data: body);
+      diox.Response response = await dio.patch(
+        Apis.rechargeBaseUrl + url,
+        options: diox.Options(headers: header),
+        data: body,
+      );
       logger.i(
-          "StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nBody : ${response.requestOptions.data} \nResponse : ${jsonEncode(response.data)}");
+        "StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nBody : ${response.requestOptions.data} \nResponse : ${jsonEncode(response.data)}",
+      );
       return response.data;
     } on diox.DioException catch (e) {
-      logger.e("StatusCode : ${e.response?.statusCode} \nApi : ${e.requestOptions.uri} \nBody : ${e.response?.data} \nResponse : ${e.response?.data}");
+      logger.e(
+        "StatusCode : ${e.response?.statusCode} \nApi : ${e.requestOptions.uri} \nBody : ${e.response?.data} \nResponse : ${e.response?.data}",
+      );
       if (e.response?.statusCode == 401) {
         // Silent redirect to login - do not show toast when unauthorized
-        logger.w("401 Unauthorized (Recharge PATCH) - silently redirecting to login");
+        logger.w(
+          "401 Unauthorized (Recharge PATCH) - silently redirecting to login",
+        );
         if (Get.context != null) {
           Get.offAllNamed(Routes.login);
         }
       } else if (e.response?.data['message'] != null) {
         if (e.response?.statusCode == 400 || e.response?.statusCode == 403) {
-          showToast(e.response?.data['message'].toString() ?? 'Something went wrong');
+          showToast(
+            e.response?.data['message'].toString() ?? 'Something went wrong',
+          );
         }
       }
       rethrow;
@@ -764,21 +963,31 @@ class RechargeDioHelper {
 
   Future<dynamic> delete({required String url}) async {
     try {
-      diox.Response response = await dio.delete(Apis.rechargeBaseUrl + url, options: diox.Options(headers: header));
+      diox.Response response = await dio.delete(
+        Apis.rechargeBaseUrl + url,
+        options: diox.Options(headers: header),
+      );
       logger.i(
-          "StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nResponse : ${jsonEncode(response.data)}");
+        "StatusCode : ${response.statusCode} \nApi : ${response.requestOptions.uri} \nResponse : ${jsonEncode(response.data)}",
+      );
       return response.data;
     } on diox.DioException catch (e) {
-      logger.e("StatusCode : ${e.response?.statusCode} \nApi : ${e.requestOptions.uri} \nResponse : ${e.response?.data}");
+      logger.e(
+        "StatusCode : ${e.response?.statusCode} \nApi : ${e.requestOptions.uri} \nResponse : ${e.response?.data}",
+      );
       if (e.response?.statusCode == 401) {
         // Silent redirect to login - do not show toast when unauthorized
-        logger.w("401 Unauthorized (Recharge DELETE) - silently redirecting to login");
+        logger.w(
+          "401 Unauthorized (Recharge DELETE) - silently redirecting to login",
+        );
         if (Get.context != null) {
           Get.offAllNamed(Routes.login);
         }
       } else if (e.response?.data['message'] != null) {
         if (e.response?.statusCode == 400 || e.response?.statusCode == 403) {
-          showToast(e.response?.data['message'].toString() ?? 'Something went wrong');
+          showToast(
+            e.response?.data['message'].toString() ?? 'Something went wrong',
+          );
         }
       }
       rethrow;

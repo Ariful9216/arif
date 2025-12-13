@@ -300,13 +300,13 @@ class HomeScreen extends StatelessWidget {
                 )
               ),
 
-              const SizedBox(height: 20), // Increased from 12 to 20
+              const SizedBox(height: 24), // Consistent spacing
 
               // Offers Section with white background and shadow
               Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20),
+                margin: const EdgeInsets.symmetric(horizontal: 16),
                 // We add padding but it should not effect to text
-                padding: const EdgeInsets.symmetric(vertical: 20),
+                padding: const EdgeInsets.symmetric(vertical: 16),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
@@ -388,10 +388,10 @@ class HomeScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 20), // Increased from 12 to 20
+              const SizedBox(height: 24), // Consistent spacing
               // Services Section - Redesigned for 2 items
               Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20),
+                margin: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -438,8 +438,8 @@ class HomeScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 20), // Increased from 12 to 20
-              
+              const SizedBox(height: 24), // Consistent spacing
+
               // Shopping Section
               _buildShoppingSection(),
               
@@ -461,7 +461,7 @@ class HomeScreen extends StatelessWidget {
         children: [
           const SizedBox(height: 12),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(color: AppColors.primaryColor, borderRadius: BorderRadius.only(topRight: Radius.circular(20), bottomRight: Radius.circular(20))),
             child: Text(title, style: const TextStyle(color: Colors.white)),
           ),
@@ -1431,7 +1431,7 @@ class HomeScreen extends StatelessWidget {
             
             // Product Info - Optimized for space with minimal padding
             Padding(
-              padding: const EdgeInsets.all(6), // Reduced padding
+              padding: const EdgeInsets.all(8), // Consistent spacing
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
@@ -1465,7 +1465,7 @@ class HomeScreen extends StatelessWidget {
                   
                   // Description optional - only show if there's space
                   if (product.description.isNotEmpty && product.brand.isEmpty) ...[
-                    const SizedBox(height: 4), // Minimal spacing
+                    const SizedBox(height: 8), // Consistent spacing
                     Text(
                       product.description,
                       style: TextStyle(
@@ -1477,9 +1477,9 @@ class HomeScreen extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],
-                  
-                  const SizedBox(height: 4), // Minimal spacing
-                  
+
+                  const SizedBox(height: 8), // Consistent spacing
+
                   // Price Section with Flash Sale Support
                   if (product.flashSale.isCurrentlyActive && 
                       product.flashSale.discountPrice != null) ...[
@@ -1494,7 +1494,7 @@ class HomeScreen extends StatelessWidget {
                             color: Colors.red[600],
                           ),
                         ),
-                        const SizedBox(width: 3),
+                        const SizedBox(width: 4),
                         Icon(
                           Icons.local_fire_department,
                           size: 11,

@@ -315,7 +315,7 @@ class FavouritesScreen extends StatelessWidget {
                               color: Colors.white,
                               size: 12,
                             ),
-                            const SizedBox(width: 2),
+                            const SizedBox(width: 4),
                             Text(
                               'SALE',
                               style: TextStyle(
@@ -334,7 +334,7 @@ class FavouritesScreen extends StatelessWidget {
             
             // Product info
             Container(
-              padding: const EdgeInsets.all(10), // Increased padding
+              padding: const EdgeInsets.all(8), // Consistent spacing
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -349,9 +349,9 @@ class FavouritesScreen extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    
-                    const SizedBox(height: 4), // Increased spacing
-                    
+
+                    const SizedBox(height: 8), // Consistent spacing
+
                     // Brand
                     if (product.brand.isNotEmpty)
                       Text(
@@ -421,7 +421,7 @@ class FavouritesScreen extends StatelessWidget {
                                 color: Colors.amber,
                                 size: 11,
                               ),
-                              const SizedBox(width: 2),
+                              const SizedBox(width: 4),
                               Text(
                                 product.rating.formattedAverage,
                                 style: TextStyle(
