@@ -37,9 +37,7 @@ class ReferralScreen extends StatelessWidget {
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(
-            child: CircularProgressIndicator(
-              color: AppColors.primaryColor,
-            ),
+            child: CircularProgressIndicator(color: AppColors.primaryColor),
           );
         }
 
@@ -51,15 +49,15 @@ class ReferralScreen extends StatelessWidget {
               // Header Card
               _buildHeaderCard(),
               const SizedBox(height: 20),
-              
+
               // Stats Cards
               _buildStatsCards(),
               const SizedBox(height: 20),
-              
+
               // Referral Code Section
               _buildReferralCodeSection(),
               const SizedBox(height: 20),
-              
+
               // Recent Referrals
               _buildRecentReferrals(),
             ],
@@ -102,11 +100,7 @@ class ReferralScreen extends StatelessWidget {
                   color: Colors.white.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Icon(
-                  Icons.people,
-                  color: Colors.white,
-                  size: 24,
-                ),
+                child: const Icon(Icons.people, color: Colors.white, size: 24),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -163,7 +157,12 @@ class ReferralScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStatCard(String title, String value, IconData icon, Color color) {
+  Widget _buildStatCard(
+    String title,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -192,10 +191,7 @@ class ReferralScreen extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             title,
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey[600],
-            ),
+            style: TextStyle(fontSize: 12, color: Colors.grey[600]),
             textAlign: TextAlign.center,
           ),
         ],
@@ -330,32 +326,28 @@ class ReferralScreen extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           if (controller.recentReferrals.isEmpty)
-            Container(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  Icon(
-                    Icons.people_outline,
-                    size: 48,
-                    color: Colors.grey[400],
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    'No referrals yet',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey[600],
+            Center(
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    Icon(
+                      Icons.people_outline,
+                      size: 48,
+                      color: Colors.grey[400],
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Share your referral code to start earning!',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[500],
+                    const SizedBox(height: 12),
+                    Text(
+                      'No referrals yet',
+                      style: TextStyle(fontSize: 16, color: Colors.grey[600]),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 4),
+                    Text(
+                      'Share your referral code to start earning!',
+                      style: TextStyle(fontSize: 14, color: Colors.grey[500]),
+                    ),
+                  ],
+                ),
               ),
             )
           else
@@ -377,7 +369,9 @@ class ReferralScreen extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 20,
-                        backgroundColor: AppColors.primaryColor.withOpacity(0.1),
+                        backgroundColor: AppColors.primaryColor.withOpacity(
+                          0.1,
+                        ),
                         child: Icon(
                           Icons.person,
                           color: AppColors.primaryColor,
@@ -419,16 +413,25 @@ class ReferralScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 2),
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 2,
+                            ),
                             decoration: BoxDecoration(
-                              color: referral.isVerified ? Colors.green[100] : Colors.orange[100],
+                              color:
+                                  referral.isVerified
+                                      ? Colors.green[100]
+                                      : Colors.orange[100],
                               borderRadius: BorderRadius.circular(4),
                             ),
                             child: Text(
                               referral.isVerified ? 'Verified' : 'Pending',
                               style: TextStyle(
                                 fontSize: 10,
-                                color: referral.isVerified ? Colors.green[700] : Colors.orange[700],
+                                color:
+                                    referral.isVerified
+                                        ? Colors.green[700]
+                                        : Colors.orange[700],
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -459,7 +462,9 @@ class ReferralScreen extends StatelessWidget {
       // For now, just copy the code and show a message
       // In production, you can integrate with share_plus package
       Clipboard.setData(ClipboardData(text: controller.referralCode.value));
-      showToast('Referral code copied! You can now share it on social media, messaging apps, etc.');
+      showToast(
+        'Referral code copied! You can now share it on social media, messaging apps, etc.',
+      );
     } else {
       showToast('No referral code available');
     }
