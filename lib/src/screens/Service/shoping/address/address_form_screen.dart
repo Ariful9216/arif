@@ -6,7 +6,7 @@ import 'package:arif_mart/src/screens/Service/shoping/address/controller/address
 
 class AddressFormScreen extends StatefulWidget {
   final AddressData? address;
-  
+
   const AddressFormScreen({super.key, this.address});
 
   @override
@@ -23,7 +23,7 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
   final _fullAddressController = TextEditingController();
   final _landmarkController = TextEditingController();
   final _postalCodeController = TextEditingController();
-  
+
   String _selectedAddressType = 'home';
   bool _isDefault = false;
   bool _isLoading = false;
@@ -67,7 +67,7 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
   Widget build(BuildContext context) {
     final controller = Get.put(AddressController());
     final isEditing = widget.address != null;
-    
+
     return Scaffold(
       appBar: AppBar(
         title: Text(isEditing ? 'Edit Address' : 'Add New Address'),
@@ -83,11 +83,12 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
             // Address Type Selection
             _buildSectionTitle('Address Type'),
             _buildAddressTypeSelector(),
-            
+
             const SizedBox(height: 20),
-            
+
             // Personal Information
             _buildSectionTitle('Personal Information'),
+
             _buildTextField(
               controller: _nameController,
               label: 'Full Name',
@@ -99,9 +100,9 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
                 return null;
               },
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             _buildTextField(
               controller: _phoneController,
               label: 'Phone Number',
@@ -117,9 +118,9 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
                 return null;
               },
             ),
-            
+
             const SizedBox(height: 20),
-            
+
             // Location Information
             _buildSectionTitle('Location Information'),
             _buildTextField(
@@ -133,9 +134,9 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
                 return null;
               },
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             _buildTextField(
               controller: _thanaController,
               label: 'Thana/Upazila',
@@ -147,9 +148,9 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
                 return null;
               },
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             _buildTextField(
               controller: _villageController,
               label: 'Village/Area',
@@ -161,9 +162,9 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
                 return null;
               },
             ),
-            
+
             const SizedBox(height: 20),
-            
+
             // Address Details
             _buildSectionTitle('Address Details'),
             _buildTextField(
@@ -178,32 +179,32 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
                 return null;
               },
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             _buildTextField(
               controller: _landmarkController,
               label: 'Landmark (Optional)',
               hint: 'Enter nearby landmark',
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             _buildTextField(
               controller: _postalCodeController,
               label: 'Postal Code (Optional)',
               hint: 'Enter postal code',
               keyboardType: TextInputType.number,
             ),
-            
+
             const SizedBox(height: 20),
-            
+
             // Default Address Option
             if (!isEditing || !widget.address!.isDefault)
               _buildDefaultAddressOption(),
-            
+
             const SizedBox(height: 32),
-            
+
             // Save Button
             SizedBox(
               width: double.infinity,
@@ -217,22 +218,25 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                child: _isLoading
-                    ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                child:
+                    _isLoading
+                        ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Colors.white,
+                            ),
+                          ),
+                        )
+                        : Text(
+                          isEditing ? 'Update Address' : 'Save Address',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      )
-                    : Text(
-                        isEditing ? 'Update Address' : 'Save Address',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
               ),
             ),
           ],
@@ -242,12 +246,15 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
   }
 
   Widget _buildSectionTitle(String title) {
-    return Text(
-      title,
-      style: const TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.bold,
-        color: AppColors.primaryColor,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Text(
+        title,
+        style: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: AppColors.primaryColor,
+        ),
       ),
     );
   }
@@ -267,31 +274,19 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
             DropdownMenuItem(
               value: 'home',
               child: Row(
-                children: [
-                  Text('🏠'),
-                  SizedBox(width: 8),
-                  Text('Home'),
-                ],
+                children: [Text('🏠'), SizedBox(width: 8), Text('Home')],
               ),
             ),
             DropdownMenuItem(
               value: 'work',
               child: Row(
-                children: [
-                  Text('🏢'),
-                  SizedBox(width: 8),
-                  Text('Work'),
-                ],
+                children: [Text('🏢'), SizedBox(width: 8), Text('Work')],
               ),
             ),
             DropdownMenuItem(
               value: 'other',
               child: Row(
-                children: [
-                  Text('📍'),
-                  SizedBox(width: 8),
-                  Text('Other'),
-                ],
+                children: [Text('📍'), SizedBox(width: 8), Text('Other')],
               ),
             ),
           ],
@@ -321,14 +316,22 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
       decoration: InputDecoration(
         labelText: label,
         hintText: hint,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+        enabledBorder: defaultOutLineerBorder(),
+        disabledBorder: defaultOutLineerBorder(),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(color: AppColors.primaryColor),
         ),
       ),
+    );
+  }
+
+  OutlineInputBorder defaultOutLineerBorder() {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8),
+      // borderSide: BorderSide(color: AppColors.primaryColor),
+      borderSide: BorderSide(color: Colors.grey[300]!),
     );
   }
 
@@ -354,17 +357,11 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
                 children: [
                   const Text(
                     'Set as Default Address',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                   Text(
                     'This address will be used for future orders',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey[600],
-                    ),
+                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                   ),
                 ],
               ),
@@ -386,7 +383,7 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
 
     try {
       bool success;
-      
+
       if (widget.address != null) {
         // Update existing address
         success = await controller.updateAddress(
@@ -422,8 +419,8 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
         Get.back();
         Get.snackbar(
           'Success',
-          widget.address != null 
-              ? 'Address updated successfully' 
+          widget.address != null
+              ? 'Address updated successfully'
               : 'Address created successfully',
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.green,
