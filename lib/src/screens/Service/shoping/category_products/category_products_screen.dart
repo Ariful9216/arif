@@ -15,10 +15,12 @@ class CategoryProductsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.primaryColor,
-        title: Obx(() => Text(
-          controller.categoryName.value,
-          style: const TextStyle(color: Colors.white),
-        )),
+        title: Obx(
+          () => Text(
+            controller.categoryName.value,
+            style: const TextStyle(color: Colors.white),
+          ),
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Get.back(),
@@ -35,15 +37,14 @@ class CategoryProductsScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryColor),
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      AppColors.primaryColor,
+                    ),
                   ),
                   const SizedBox(height: 16),
                   Text(
                     'Loading products...',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey[600],
-                    ),
+                    style: TextStyle(fontSize: 16, color: Colors.grey[600]),
                   ),
                 ],
               ),
@@ -73,10 +74,7 @@ class CategoryProductsScreen extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     'This category has no products yet',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[500],
-                    ),
+                    style: TextStyle(fontSize: 14, color: Colors.grey[500]),
                   ),
                 ],
               ),
@@ -92,7 +90,7 @@ class CategoryProductsScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 color: Colors.grey[100],
                 child: Text(
-                  '${controller.totalCount.value} Products',
+                  '${controller.totalCount.value} Product${controller.totalCount.value == 1 ? '' : 's'}',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
@@ -111,7 +109,9 @@ class CategoryProductsScreen extends StatelessWidget {
                     crossAxisSpacing: 12,
                     mainAxisSpacing: 12,
                   ),
-                  itemCount: controller.products.length + (controller.hasMore.value ? 1 : 0),
+                  itemCount:
+                      controller.products.length +
+                      (controller.hasMore.value ? 1 : 0),
                   itemBuilder: (context, index) {
                     // Load more indicator
                     if (index == controller.products.length) {
@@ -120,7 +120,9 @@ class CategoryProductsScreen extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryColor),
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                AppColors.primaryColor,
+                              ),
                             ),
                           ),
                         );

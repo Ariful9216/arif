@@ -10,11 +10,7 @@ class SimpleProductCard extends StatelessWidget {
   final ProductData product;
   final VoidCallback? onTap;
 
-  const SimpleProductCard({
-    super.key,
-    required this.product,
-    this.onTap,
-  });
+  const SimpleProductCard({super.key, required this.product, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -47,30 +43,28 @@ class SimpleProductCard extends StatelessWidget {
                     topLeft: Radius.circular(8),
                     topRight: Radius.circular(8),
                   ),
-                  child: product.primaryImageUrl.isNotEmpty
-                      ? Image.network(
-                          product.primaryImageUrl,
-                          width: double.infinity,
-                          height: 120,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return _buildPlaceholderImage();
-                          },
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return _buildLoadingImage();
-                          },
-                        )
-                      : _buildPlaceholderImage(),
+                  child:
+                      product.primaryImageUrl.isNotEmpty
+                          ? Image.network(
+                            product.primaryImageUrl,
+                            width: double.infinity,
+                            height: 120,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return _buildPlaceholderImage();
+                            },
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return _buildLoadingImage();
+                            },
+                          )
+                          : _buildPlaceholderImage(),
                 ),
                 // Heart Icon (Favourite)
                 Positioned(
                   top: 6,
                   right: 6,
-                  child: WishlistHeartIcon(
-                    productId: product.id,
-                    iconSize: 18,
-                  ),
+                  child: WishlistHeartIcon(productId: product.id, iconSize: 18),
                 ),
                 // Flash Sale Badge
                 if (product.flashSale.isCurrentlyActive)
@@ -78,7 +72,10 @@ class SimpleProductCard extends StatelessWidget {
                     top: 6,
                     left: 6,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
                           colors: [Colors.red, Colors.redAccent],
@@ -117,7 +114,7 @@ class SimpleProductCard extends StatelessWidget {
                   ),
               ],
             ),
-            
+
             // Product Info with Flexible Space
             Expanded(
               child: Padding(
@@ -136,23 +133,21 @@ class SimpleProductCard extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    
+
                     // Brand
                     if (product.brand.isNotEmpty) ...[
                       const SizedBox(height: 2),
                       Text(
                         product.brand,
-                        style: TextStyle(
-                          fontSize: 9,
-                          color: Colors.grey[600],
-                        ),
+                        style: TextStyle(fontSize: 9, color: Colors.grey[600]),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ],
-                    
+
                     // Small Description (only if space allows)
-                    if (product.description.isNotEmpty && product.brand.isEmpty) ...[
+                    if (product.description.isNotEmpty &&
+                        product.brand.isEmpty) ...[
                       const SizedBox(height: 2),
                       Text(
                         product.description,
@@ -165,16 +160,16 @@ class SimpleProductCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ],
-                    
+
                     const Spacer(),
-                    
+
                     // Price and Rating (pushes to bottom)
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         // Price Section with Flash Sale Support
-                        if (product.flashSale.isCurrentlyActive && 
+                        if (product.flashSale.isCurrentlyActive &&
                             product.flashSale.discountPrice != null) ...[
                           // Flash Sale Price Display
                           Row(
@@ -216,9 +211,9 @@ class SimpleProductCard extends StatelessWidget {
                             ),
                           ),
                         ],
-                        
+
                         const SizedBox(height: 2),
-                        
+
                         // Reviews (Rating) - Always show stars
                         Row(
                           children: [
@@ -226,9 +221,10 @@ class SimpleProductCard extends StatelessWidget {
                               return Icon(
                                 Icons.star,
                                 size: 9,
-                                color: index < product.rating.filledStars 
-                                    ? Colors.amber 
-                                    : Colors.grey[300],
+                                color:
+                                    index < product.rating.filledStars
+                                        ? Colors.amber
+                                        : Colors.grey[300],
                               );
                             }),
                             const SizedBox(width: 2),
@@ -243,7 +239,6 @@ class SimpleProductCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    
                   ],
                 ),
               ),
@@ -262,18 +257,11 @@ class SimpleProductCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.image,
-            size: 30,
-            color: Colors.grey[400],
-          ),
+          Icon(Icons.image, size: 30, color: Colors.grey[400]),
           const SizedBox(height: 4),
           Text(
             'No Image',
-            style: TextStyle(
-              fontSize: 10,
-              color: Colors.grey[600],
-            ),
+            style: TextStyle(fontSize: 10, color: Colors.grey[600]),
           ),
         ],
       ),
@@ -304,28 +292,18 @@ class SimpleProductGridCard extends StatelessWidget {
   final ProductData product;
   final VoidCallback? onTap;
 
-  const SimpleProductGridCard({
-    super.key,
-    required this.product,
-    this.onTap,
-  });
+  const SimpleProductGridCard({super.key, required this.product, this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return SimpleProductCard(
-      product: product,
-      onTap: onTap,
-    );
+    return SimpleProductCard(product: product, onTap: onTap);
   }
 }
 
 class ProductCategoryScreen extends StatelessWidget {
   final ProductCategoryController controller;
 
-  const ProductCategoryScreen({
-    super.key,
-    required this.controller,
-  });
+  const ProductCategoryScreen({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -371,10 +349,7 @@ class ProductCategoryScreen extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             'Loading ${controller.categoryTitle.toLowerCase()}...',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey[600],
-            ),
+            style: TextStyle(fontSize: 16, color: Colors.grey[600]),
           ),
         ],
       ),
@@ -388,11 +363,7 @@ class ProductCategoryScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.error_outline,
-              size: 64,
-              color: Colors.grey[400],
-            ),
+            Icon(Icons.error_outline, size: 64, color: Colors.grey[400]),
             const SizedBox(height: 16),
             Text(
               'Something went wrong',
@@ -405,10 +376,7 @@ class ProductCategoryScreen extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               controller.errorMessage.value,
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[600],
-              ),
+              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
@@ -417,7 +385,10 @@ class ProductCategoryScreen extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primaryColor,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 32,
+                  vertical: 12,
+                ),
               ),
               child: const Text('Retry'),
             ),
@@ -434,11 +405,7 @@ class ProductCategoryScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.inventory_2_outlined,
-              size: 64,
-              color: Colors.grey[400],
-            ),
+            Icon(Icons.inventory_2_outlined, size: 64, color: Colors.grey[400]),
             const SizedBox(height: 16),
             Text(
               'No products found',
@@ -451,10 +418,7 @@ class ProductCategoryScreen extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               'No ${controller.categoryTitle.toLowerCase()} available at the moment',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[600],
-              ),
+              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
@@ -463,7 +427,10 @@ class ProductCategoryScreen extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primaryColor,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 32,
+                  vertical: 12,
+                ),
               ),
               child: const Text('Refresh'),
             ),
@@ -501,7 +468,9 @@ class ProductCategoryScreen extends StatelessWidget {
                       height: 16,
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryColor),
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          AppColors.primaryColor,
+                        ),
                       ),
                     ),
                 ],
@@ -513,16 +482,13 @@ class ProductCategoryScreen extends StatelessWidget {
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             sliver: SliverGrid(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final product = controller.products[index];
-                  return SimpleProductGridCard(
-                    product: product,
-                    onTap: () => controller.navigateToProductDetail(product),
-                  );
-                },
-                childCount: controller.products.length,
-              ),
+              delegate: SliverChildBuilderDelegate((context, index) {
+                final product = controller.products[index];
+                return SimpleProductGridCard(
+                  product: product,
+                  onTap: () => controller.navigateToProductDetail(product),
+                );
+              }, childCount: controller.products.length),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 childAspectRatio: 0.7,
@@ -540,22 +506,22 @@ class ProductCategoryScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(16),
                   child: Center(
                     child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryColor),
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        AppColors.primaryColor,
+                      ),
                     ),
                   ),
                 );
               }
 
-              if (!controller.hasMoreData.value && controller.products.isNotEmpty) {
+              if (!controller.hasMoreData.value &&
+                  controller.products.isNotEmpty) {
                 return Container(
                   padding: const EdgeInsets.all(16),
                   child: Center(
                     child: Text(
                       'No more products',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[600],
-                      ),
+                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                     ),
                   ),
                 );
@@ -566,9 +532,7 @@ class ProductCategoryScreen extends StatelessWidget {
           ),
 
           // Bottom padding
-          const SliverToBoxAdapter(
-            child: SizedBox(height: 16),
-          ),
+          const SliverToBoxAdapter(child: SizedBox(height: 16)),
         ],
       ),
     );
