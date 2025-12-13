@@ -139,14 +139,15 @@ class HomeScreen extends StatelessWidget {
                 try {
                   print("=== BELL ICON CLICKED ===");
                   print("Navigating to notifications screen...");
-                  
+
                   // Navigate to notifications and wait for return
                   await Get.toNamed(Routes.notifications);
-                  
+
                   // Immediately refresh unread count when returning
-                  print("Returned from notifications, refreshing unread count...");
+                  print(
+                    "Returned from notifications, refreshing unread count...",
+                  );
                   await controller.getUnreadNotificationCount();
-                  
                 } catch (e) {
                   print("Error navigating to notifications: $e");
                 }
@@ -154,39 +155,47 @@ class HomeScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
               child: Padding(
                 padding: const EdgeInsets.all(8),
-              child: Stack(
-                children: [
-                    const Icon(Icons.notifications_rounded, color: Colors.white, size: 20),
-                  // Unread count badge
-                  Obx(() => controller.unreadNotificationCount.value > 0
-                      ? Positioned(
-                          right: 0,
-                          top: 0,
-                          child: Container(
-                              padding: const EdgeInsets.all(2),
-                            decoration: const BoxDecoration(
-                              color: Colors.red,
-                              shape: BoxShape.circle,
-                            ),
-                            constraints: const BoxConstraints(
-                                minWidth: 12,
-                                minHeight: 12,
-                            ),
-                            child: Text(
-                              controller.unreadNotificationCount.value > 99 
-                                  ? '99+' 
-                                  : '${controller.unreadNotificationCount.value}',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                  fontSize: 8,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        )
-                      : const SizedBox.shrink()),
-                ],
+                child: Stack(
+                  children: [
+                    const Icon(
+                      Icons.notifications_rounded,
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                    // Unread count badge
+                    Obx(
+                      () =>
+                          controller.unreadNotificationCount.value > 0
+                              ? Positioned(
+                                right: 0,
+                                top: 0,
+                                child: Container(
+                                  padding: const EdgeInsets.all(2),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.red,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  constraints: const BoxConstraints(
+                                    minWidth: 12,
+                                    minHeight: 12,
+                                  ),
+                                  child: Text(
+                                    controller.unreadNotificationCount.value >
+                                            99
+                                        ? '99+'
+                                        : '${controller.unreadNotificationCount.value}',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 8,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              )
+                              : const SizedBox.shrink(),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -205,7 +214,11 @@ class HomeScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
               child: const Padding(
                 padding: EdgeInsets.all(8),
-                child: Icon(Icons.support_agent_rounded, color: Colors.white, size: 20),
+                child: Icon(
+                  Icons.support_agent_rounded,
+                  color: Colors.white,
+                  size: 20,
+                ),
               ),
             ),
           ),
@@ -227,9 +240,7 @@ class HomeScreen extends StatelessWidget {
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.only(top: 8, bottom: 25),
-                decoration: BoxDecoration(
-                  color: AppColors.primaryColor,
-                ),
+                decoration: BoxDecoration(color: AppColors.primaryColor),
                 child: Column(
                   children: [
                     Row(
@@ -243,28 +254,60 @@ class HomeScreen extends StatelessWidget {
                               final balance = controller.balance.value;
                               _showBalancePopup(balance);
                             },
-                            icon: const Icon(Icons.account_balance_wallet, color: AppColors.primaryColor, size: 20),
-                            label: const Text("Balance", style: TextStyle(color: AppColors.primaryColor, fontWeight: FontWeight.bold, fontSize: 14)),
+                            icon: const Icon(
+                              Icons.account_balance_wallet,
+                              color: AppColors.primaryColor,
+                              size: 20,
+                            ),
+                            label: const Text(
+                              "Balance",
+                              style: TextStyle(
+                                color: AppColors.primaryColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 6,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                             ),
                           ),
                         ),
-                        
+
                         const SizedBox(width: 12),
-                        
+
                         // Add Money Button
                         Expanded(
                           child: ElevatedButton.icon(
                             onPressed: () => Get.toNamed(Routes.addMoneyScreen),
-                            icon: const Icon(Icons.add, color: AppColors.primaryColor, size: 20),
-                            label: const Text("Add Money", style: TextStyle(color: AppColors.primaryColor, fontWeight: FontWeight.bold, fontSize: 14)),
+                            icon: const Icon(
+                              Icons.add,
+                              color: AppColors.primaryColor,
+                              size: 20,
+                            ),
+                            label: const Text(
+                              "Add Money",
+                              style: TextStyle(
+                                color: AppColors.primaryColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 6,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                             ),
                           ),
                         ),
@@ -274,34 +317,40 @@ class HomeScreen extends StatelessWidget {
                     const SizedBox(height: 12),
 
                     // Image Slider - Dynamic Banner
-                    Obx(() => controller.isSlidersLoading.value
-                      ? AspectRatio(
-                          aspectRatio: 16 / 9, // 16:9 aspect ratio (1280x720)
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: AppColors.primaryColor,
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: const Center(
-                              child: CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    Obx(
+                      () =>
+                          controller.isSlidersLoading.value
+                              ? AspectRatio(
+                                aspectRatio:
+                                    16 / 9, // 16:9 aspect ratio (1280x720)
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 16,
+                                  ),
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.primaryColor,
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  child: const Center(
+                                    child: CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                              : ImageSlider(
+                                sliders: controller.sliderList,
+                                onSliderTap: controller.openSliderUrl,
                               ),
-                            ),
-                          ),
-                        )
-                      : ImageSlider(
-                          sliders: controller.sliderList,
-                          onSliderTap: controller.openSliderUrl,
-                        )
                     ).paddingSymmetric(horizontal: 16),
-                  ]
-                )
+                  ],
+                ),
               ),
 
               const SizedBox(height: 24), // Consistent spacing
-
               // Offers Section with white background and shadow
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -330,10 +379,16 @@ class HomeScreen extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: AppColors.primaryColor,
                         // border radius should just right side
-                        borderRadius: BorderRadius.only(topRight: Radius.circular(12), bottomRight: Radius.circular(12)) 
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(12),
+                          bottomRight: Radius.circular(12),
+                        ),
                       ),
                       child: const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                        padding: EdgeInsets.symmetric(
+                          vertical: 8.0,
+                          horizontal: 16.0,
+                        ),
                         child: Text(
                           "Offers",
                           style: TextStyle(
@@ -349,40 +404,40 @@ class HomeScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                _simpleGridIcon(
+                        _simpleGridIcon(
                           "assets/icons/internet_offer.png",
-                  "Internet\nOffer",
-                  onTap: () {
-                    SubscriptionChecker.checkInternetOffersFeature(() {
-                      Get.toNamed(Routes.internet);
-                    });
-                  },
-                ),
-                _simpleGridIcon(
+                          "Internet\nOffer",
+                          onTap: () {
+                            SubscriptionChecker.checkInternetOffersFeature(() {
+                              Get.toNamed(Routes.internet);
+                            });
+                          },
+                        ),
+                        _simpleGridIcon(
                           "assets/icons/combo_offer.png",
-                  "Comb\nOffer",
-                  onTap: () {
-                    SubscriptionChecker.checkComboOffersFeature(() {
-                      Get.toNamed(Routes.combo);
-                    });
-                  },
-                ),
-                _simpleGridIcon(
-                  "assets/icons/minute_offer.png",
-                  "Minute\nOffer",
-                  onTap: () {
-                    SubscriptionChecker.checkMinuteOffersFeature(() {
-                      Get.toNamed(Routes.minuteOffer);
-                    });
-                  },
-                ),
-                _simpleGridIcon(
-                  "assets/icons/recharge.png",
-                  "Recharge",
-                  onTap: () {
-                    Get.toNamed(Routes.recharge);
-                  },
-                ),
+                          "Comb\nOffer",
+                          onTap: () {
+                            SubscriptionChecker.checkComboOffersFeature(() {
+                              Get.toNamed(Routes.combo);
+                            });
+                          },
+                        ),
+                        _simpleGridIcon(
+                          "assets/icons/minute_offer.png",
+                          "Minute\nOffer",
+                          onTap: () {
+                            SubscriptionChecker.checkMinuteOffersFeature(() {
+                              Get.toNamed(Routes.minuteOffer);
+                            });
+                          },
+                        ),
+                        _simpleGridIcon(
+                          "assets/icons/recharge.png",
+                          "Recharge",
+                          onTap: () {
+                            Get.toNamed(Routes.recharge);
+                          },
+                        ),
                       ],
                     ),
                   ],
@@ -404,45 +459,44 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 16),
-                     Row(
-                       children: [
-                         // Affiliate Dashboard Service
-                         Expanded(
-                           child: _buildServiceCardWithIcon(
-                             Icons.dashboard_rounded,
-                             "Affiliate Dashboard",
-                             "Track Your Earnings",
-                             () {
-                               SubscriptionChecker.checkAffiliateFeature(() {
-                                 Get.toNamed(Routes.affiliateDashboard);
-                               });
-                             },
-                           ),
-                         ),
-                         const SizedBox(width: 12),
-                         // Referral Service
-                         Expanded(
-                           child: _buildServiceCardWithIcon(
-                             Icons.people_alt_rounded,
-                             "Referral",
-                             "Invite Friends & Earn",
-                             () {
-                               SubscriptionChecker.checkReferralFeature(() {
-                                 Get.toNamed(Routes.referral);
-                               });
-                             },
-                           ),
-                         ),
-                       ],
-                     ),
+                    Row(
+                      children: [
+                        // Affiliate Dashboard Service
+                        Expanded(
+                          child: _buildServiceCardWithIcon(
+                            Icons.dashboard_rounded,
+                            "Affiliate Dashboard",
+                            "Track Your Earnings",
+                            () {
+                              SubscriptionChecker.checkAffiliateFeature(() {
+                                Get.toNamed(Routes.affiliateDashboard);
+                              });
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        // Referral Service
+                        Expanded(
+                          child: _buildServiceCardWithIcon(
+                            Icons.people_alt_rounded,
+                            "Referral",
+                            "Invite Friends & Earn",
+                            () {
+                              SubscriptionChecker.checkReferralFeature(() {
+                                Get.toNamed(Routes.referral);
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
               const SizedBox(height: 24), // Consistent spacing
-
               // Shopping Section
               _buildShoppingSection(),
-              
+
               // Add bottom padding for better scrolling experience
               const SizedBox(height: 24), // Increased from 20 to 24
             ],
@@ -455,14 +509,23 @@ class HomeScreen extends StatelessWidget {
   Widget section(String title, List<Widget> items) {
     return Container(
       width: double.infinity,
-      decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(20)),
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(20),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 12),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            decoration: BoxDecoration(color: AppColors.primaryColor, borderRadius: BorderRadius.only(topRight: Radius.circular(20), bottomRight: Radius.circular(20))),
+            decoration: BoxDecoration(
+              color: AppColors.primaryColor,
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(20),
+                bottomRight: Radius.circular(20),
+              ),
+            ),
             child: Text(title, style: const TextStyle(color: Colors.white)),
           ),
           const SizedBox(height: 12),
@@ -476,9 +539,9 @@ class HomeScreen extends StatelessWidget {
 
   Widget _gridIcon(
     dynamic icon, // Can be IconData or String (for custom PNG path)
-    String label, 
-    {VoidCallback? onTap}
-  ) {
+    String label, {
+    VoidCallback? onTap,
+  }) {
     return GestureDetector(
       onTap: onTap,
       child: SizedBox(
@@ -489,13 +552,17 @@ class HomeScreen extends StatelessWidget {
               height: 40,
               width: 40,
               decoration: BoxDecoration(
-                color: AppColors.primaryColor, 
-                borderRadius: BorderRadius.circular(8)
+                color: AppColors.primaryColor,
+                borderRadius: BorderRadius.circular(8),
               ),
               child: _buildIconWidget(icon),
             ),
             const SizedBox(height: 6),
-            Text(label, style: const TextStyle(fontSize: 12), textAlign: TextAlign.center),
+            Text(
+              label,
+              style: const TextStyle(fontSize: 12),
+              textAlign: TextAlign.center,
+            ),
           ],
         ),
       ),
@@ -505,9 +572,9 @@ class HomeScreen extends StatelessWidget {
   // Simple grid icon without background styles
   Widget _simpleGridIcon(
     String imagePath, // Only accepts image path
-    String label, 
-    {VoidCallback? onTap}
-  ) {
+    String label, {
+    VoidCallback? onTap,
+  }) {
     return GestureDetector(
       onTap: onTap,
       child: SizedBox(
@@ -526,9 +593,9 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 6),
             Text(
-              label, 
-              style: const TextStyle(fontSize: 12), 
-              textAlign: TextAlign.center
+              label,
+              style: const TextStyle(fontSize: 12),
+              textAlign: TextAlign.center,
             ),
           ],
         ),
@@ -595,7 +662,10 @@ class HomeScreen extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: Text("Close", style: TextStyle(color: AppColors.primaryColor)),
+            child: Text(
+              "Close",
+              style: TextStyle(color: AppColors.primaryColor),
+            ),
           ),
           ElevatedButton(
             onPressed: () {
@@ -604,9 +674,14 @@ class HomeScreen extends StatelessWidget {
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primaryColor,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
-            child: const Text("Add Money", style: TextStyle(color: Colors.white)),
+            child: const Text(
+              "Add Money",
+              style: TextStyle(color: Colors.white),
+            ),
           ),
         ],
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -636,10 +711,7 @@ class HomeScreen extends StatelessWidget {
               offset: const Offset(0, 2),
             ),
           ],
-          border: Border.all(
-            color: Colors.grey.withOpacity(0.2),
-            width: 1,
-          ),
+          border: Border.all(color: Colors.grey.withOpacity(0.2), width: 1),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -693,144 +765,132 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
-      );
-    }
+    );
+  }
 
-    Widget _buildServiceCardWithIcon(IconData icon, String title, String subtitle, VoidCallback onTap) {
-      return GestureDetector(
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.all(10),
-          // I need to if else condition
-          decoration: BoxDecoration(
-            color: title == "Referral" ? AppColors.primaryColor : AppColors.redColor,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: title == "Referral" ? AppColors.primaryColor.withOpacity(0.3) : AppColors.redColor.withOpacity(0.3),
-                spreadRadius: 1,
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Icon
-              Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Center(
-                  child: Icon(
-                    icon,
-                    size: 22,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 12),
-              // Title
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(height: 4),
-              // Subtitle
-              Text(
-                subtitle,
-                style: TextStyle(
-                  fontSize: 10,
-                  color: Colors.white.withOpacity(0.9),
-                  height: 1.2,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-
-    void _showComingSoonDialog(String featureName) {
-      Get.dialog(
-        AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          title: Row(
-            children: [
-              Icon(
-                Icons.construction,
-                color: AppColors.primaryColor,
-                size: 28,
-              ),
-              const SizedBox(width: 12),
-              const Text(
-                'Coming Soon',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SizedBox(height: 8),
-              Text(
-                '$featureName is currently under development.',
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Colors.black87,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'We\'re working hard to bring you this feature soon. Stay tuned!',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey[600],
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Get.back(),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                decoration: BoxDecoration(
-                  color: AppColors.primaryColor,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Text(
-                  'Got it',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
+  Widget _buildServiceCardWithIcon(
+    IconData icon,
+    String title,
+    String subtitle,
+    VoidCallback onTap,
+  ) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        // I need to if else condition
+        decoration: BoxDecoration(
+          color:
+              title == "Referral" ? AppColors.primaryColor : AppColors.redColor,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color:
+                  title == "Referral"
+                      ? AppColors.primaryColor.withOpacity(0.3)
+                      : AppColors.redColor.withOpacity(0.3),
+              spreadRadius: 1,
+              blurRadius: 8,
+              offset: const Offset(0, 2),
             ),
           ],
         ),
-      );
-    }
-  
-    // Shopping Section
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Icon
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Center(child: Icon(icon, size: 22, color: Colors.white)),
+            ),
+            const SizedBox(height: 12),
+            // Title
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 4),
+            // Subtitle
+            Text(
+              subtitle,
+              style: TextStyle(
+                fontSize: 10,
+                color: Colors.white.withOpacity(0.9),
+                height: 1.2,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showComingSoonDialog(String featureName) {
+    Get.dialog(
+      AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Row(
+          children: [
+            Icon(Icons.construction, color: AppColors.primaryColor, size: 28),
+            const SizedBox(width: 12),
+            const Text(
+              'Coming Soon',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 8),
+            Text(
+              '$featureName is currently under development.',
+              style: const TextStyle(fontSize: 16, color: Colors.black87),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'We\'re working hard to bring you this feature soon. Stay tuned!',
+              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+              decoration: BoxDecoration(
+                color: AppColors.primaryColor,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Text(
+                'Got it',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Shopping Section
   Widget _buildShoppingSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -848,23 +908,23 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 16),
-        
+
         // Shopping Banner
         _buildShoppingBanner(),
         const SizedBox(height: 18),
-        
+
         // Search Bar
         _buildSearchBar(),
         const SizedBox(height: 16),
-        
+
         // Categories
         _buildCategories(),
         const SizedBox(height: 16),
-        
+
         // Menu Items
         _buildMenuItems(),
         const SizedBox(height: 24),
-        
+
         // Product Sections
         _buildProductSections(),
       ],
@@ -891,11 +951,11 @@ class HomeScreen extends StatelessWidget {
             ),
           );
         }
-        
+
         if (shoppingController.banners.isEmpty) {
           return const SizedBox.shrink();
         }
-        
+
         return ShoppingBannerWidget(
           banners: shoppingController.banners,
           margin: EdgeInsets.zero,
@@ -907,33 +967,36 @@ class HomeScreen extends StatelessWidget {
   Widget _buildSearchBar() {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
-      child: Obx(() => TextField(
-        onChanged: shoppingController.updateSearchQuery,
-        decoration: InputDecoration(
-          hintText: "Search products...",
-          prefixIcon: const Icon(Icons.search),
-          suffixIcon: shoppingController.searchQuery.value.isNotEmpty
-              ? IconButton(
-                  icon: const Icon(Icons.clear),
-                  onPressed: shoppingController.clearSearch,
-                )
-              : null,
-          filled: true,
-          fillColor: Colors.grey[50],
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(25),
-            borderSide: BorderSide(color: Colors.grey.shade300),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(25),
-            borderSide: BorderSide(color: Colors.grey.shade300),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(25),
-            borderSide: BorderSide(color: AppColors.primaryColor),
+      child: Obx(
+        () => TextField(
+          onChanged: shoppingController.updateSearchQuery,
+          decoration: InputDecoration(
+            hintText: "Search products...",
+            prefixIcon: const Icon(Icons.search),
+            suffixIcon:
+                shoppingController.searchQuery.value.isNotEmpty
+                    ? IconButton(
+                      icon: const Icon(Icons.clear),
+                      onPressed: shoppingController.clearSearch,
+                    )
+                    : null,
+            filled: true,
+            fillColor: Colors.grey[50],
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(25),
+              borderSide: BorderSide(color: Colors.grey.shade300),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(25),
+              borderSide: BorderSide(color: Colors.grey.shade300),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(25),
+              borderSide: BorderSide(color: AppColors.primaryColor),
+            ),
           ),
         ),
-      )),
+      ),
     );
   }
 
@@ -942,11 +1005,9 @@ class HomeScreen extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 20),
       child: Obx(() {
         if (shoppingController.isCategoriesLoading.value) {
-          return Container(
+          return SizedBox(
             height: 40,
-            child: const Center(
-              child: CircularProgressIndicator(),
-            ),
+            child: const Center(child: CircularProgressIndicator()),
           );
         }
 
@@ -954,7 +1015,7 @@ class HomeScreen extends StatelessWidget {
           return const SizedBox.shrink();
         }
 
-        return Container(
+        return SizedBox(
           height: 40,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
@@ -966,7 +1027,8 @@ class HomeScreen extends StatelessWidget {
                 child: ChoiceChip(
                   label: Text(category.name),
                   selected: false,
-                  onSelected: (_) => shoppingController.selectCategory(category.id),
+                  onSelected:
+                      (_) => shoppingController.selectCategory(category.id),
                   backgroundColor: Colors.grey[100],
                   selectedColor: AppColors.primaryColor.withOpacity(0.2),
                   labelStyle: TextStyle(
@@ -974,7 +1036,10 @@ class HomeScreen extends StatelessWidget {
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                     side: BorderSide(color: Colors.grey.shade300),
@@ -1004,14 +1069,17 @@ class HomeScreen extends StatelessWidget {
             label: "Favorites",
             onTap: shoppingController.navigateToFavorites,
           ),
-          Obx(() => _buildMenuItem(
-            icon: Icons.shopping_cart,
-            label: "Cart",
-            onTap: shoppingController.navigateToCart,
-            badgeCount: shoppingController.cartItemCount.value > 0 
-                ? shoppingController.cartItemCount.value 
-                : null,
-          )),
+          Obx(
+            () => _buildMenuItem(
+              icon: Icons.shopping_cart,
+              label: "Cart",
+              onTap: shoppingController.navigateToCart,
+              badgeCount:
+                  shoppingController.cartItemCount.value > 0
+                      ? shoppingController.cartItemCount.value
+                      : null,
+            ),
+          ),
           _buildMenuItem(
             icon: Icons.location_on,
             label: "Address",
@@ -1071,9 +1139,13 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildProductSections() {
-    return Obx(() => shoppingController.hasSearchResults.value || shoppingController.isLoadingSearch.value
-      ? _buildSearchResults()
-      : _buildProductSectionsContent());
+    return Obx(
+      () =>
+          shoppingController.hasSearchResults.value ||
+                  shoppingController.isLoadingSearch.value
+              ? _buildSearchResults()
+              : _buildProductSectionsContent(),
+    );
   }
 
   Widget _buildSearchResults() {
@@ -1082,30 +1154,26 @@ class HomeScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Obx(() => Row(
-            children: [
-              const Text(
-                'Search Results',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+          Obx(
+            () => Row(
+              children: [
+                const Text(
+                  'Search Results',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
-              ),
-              if (shoppingController.searchResults.isNotEmpty) ...[
-                const SizedBox(width: 8),
-                Text(
-                  '(${shoppingController.searchResults.length})',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey[600],
+                if (shoppingController.searchResults.isNotEmpty) ...[
+                  const SizedBox(width: 8),
+                  Text(
+                    '(${shoppingController.searchResults.length})',
+                    style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                   ),
-                ),
+                ],
               ],
-            ],
-          )),
-          
+            ),
+          ),
+
           const SizedBox(height: 12),
-          
+
           Obx(() {
             if (shoppingController.isLoadingSearch.value) {
               return const Center(
@@ -1115,17 +1183,13 @@ class HomeScreen extends StatelessWidget {
                 ),
               );
             }
-            
+
             if (shoppingController.searchResults.isEmpty) {
               return Container(
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    Icon(
-                      Icons.search_off,
-                      size: 48,
-                      color: Colors.grey[400],
-                    ),
+                    Icon(Icons.search_off, size: 48, color: Colors.grey[400]),
                     const SizedBox(height: 12),
                     Text(
                       'No products found',
@@ -1138,23 +1202,21 @@ class HomeScreen extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       'Try searching with different keywords',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey[500],
-                      ),
+                      style: TextStyle(fontSize: 12, color: Colors.grey[500]),
                       textAlign: TextAlign.center,
                     ),
                   ],
                 ),
               );
             }
-            
+
             return GridView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                childAspectRatio: 0.62, // Adjusted for 1:1 (square) image aspect ratio
+                childAspectRatio:
+                    0.62, // Adjusted for 1:1 (square) image aspect ratio
                 crossAxisSpacing: 8,
                 mainAxisSpacing: 8,
               ),
@@ -1180,9 +1242,9 @@ class HomeScreen extends StatelessWidget {
           shoppingController.isLoadingFlashSale,
           onViewAll: () => Get.toNamed(Routes.flashSaleProducts),
         ),
-        
+
         const SizedBox(height: 24),
-        
+
         // New Products Section
         _buildProductSection(
           "New Products",
@@ -1190,14 +1252,14 @@ class HomeScreen extends StatelessWidget {
           shoppingController.isLoadingNewProducts,
           onViewAll: () => Get.toNamed(Routes.newProducts),
         ),
-        
+
         const SizedBox(height: 24),
-        
+
         // Dynamic Offers Section
         _buildOffersSection(),
-        
+
         const SizedBox(height: 24),
-        
+
         // Trending Section
         _buildProductSection(
           "Trending",
@@ -1205,9 +1267,9 @@ class HomeScreen extends StatelessWidget {
           shoppingController.isLoadingTrending,
           onViewAll: () => Get.toNamed(Routes.trendingProducts),
         ),
-        
+
         const SizedBox(height: 24),
-        
+
         // Top Selling Section
         _buildProductSection(
           "Top Selling",
@@ -1215,9 +1277,9 @@ class HomeScreen extends StatelessWidget {
           shoppingController.isLoadingTopSelling,
           onViewAll: () => Get.toNamed(Routes.topSellingProducts),
         ),
-        
+
         const SizedBox(height: 24),
-        
+
         // Top Rated Section
         _buildProductSection(
           "Top Rated",
@@ -1225,9 +1287,9 @@ class HomeScreen extends StatelessWidget {
           shoppingController.isLoadingTopRated,
           onViewAll: () => Get.toNamed(Routes.topRatedProducts),
         ),
-        
+
         const SizedBox(height: 16),
-        
+
         // Exclusive Section
         _buildProductSection(
           "Exclusive",
@@ -1235,9 +1297,9 @@ class HomeScreen extends StatelessWidget {
           shoppingController.isLoadingExclusive,
           onViewAll: () => Get.toNamed(Routes.exclusiveProducts),
         ),
-        
+
         const SizedBox(height: 24),
-        
+
         // All Products Section
         _buildAllProductsSection(),
       ],
@@ -1247,9 +1309,9 @@ class HomeScreen extends StatelessWidget {
   Widget _buildProductSection(
     String title,
     RxList<ProductData> products,
-    RxBool isLoading,
-    {VoidCallback? onViewAll}
-  ) {
+    RxBool isLoading, {
+    VoidCallback? onViewAll,
+  }) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
@@ -1259,7 +1321,10 @@ class HomeScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: AppColors.primaryColor,
                   borderRadius: BorderRadius.circular(12),
@@ -1288,24 +1353,27 @@ class HomeScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 8),
-          Obx(() => isLoading.value
-            ? _buildLoadingSection()
-            : SizedBox(
-                height: 280, // Further increased height to eliminate overflow
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: products.length,
-                  itemBuilder: (_, index) {
-                    final product = products[index];
-                    return Container(
-                      width: 140,
-                      // Remove fixed height to allow content to determine height
-                      margin: const EdgeInsets.only(right: 8),
-                      child: _buildProductCard(product),
-                    );
-                  },
-                ),
-              ),
+          Obx(
+            () =>
+                isLoading.value
+                    ? _buildLoadingSection()
+                    : SizedBox(
+                      height:
+                          280, // Further increased height to eliminate overflow
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: products.length,
+                        itemBuilder: (_, index) {
+                          final product = products[index];
+                          return Container(
+                            width: 140,
+                            // Remove fixed height to allow content to determine height
+                            margin: const EdgeInsets.only(right: 8),
+                            child: _buildProductCard(product),
+                          );
+                        },
+                      ),
+                    ),
           ),
         ],
       ),
@@ -1315,10 +1383,7 @@ class HomeScreen extends StatelessWidget {
   Widget _buildProductCard(ProductData product) {
     return GestureDetector(
       onTap: () {
-        Get.toNamed(
-          Routes.productDetail,
-          arguments: {'productId': product.id},
-        );
+        Get.toNamed(Routes.productDetail, arguments: {'productId': product.id});
       },
       child: Container(
         // Let the container size based on content
@@ -1341,32 +1406,39 @@ class HomeScreen extends StatelessWidget {
           children: [
             // Product Image with Flash Sale Badge - Square 1:1 aspect ratio
             AspectRatio(
-              aspectRatio: 1.0, // Square 1:1 (6:6) aspect ratio for product images
+              aspectRatio:
+                  1.0, // Square 1:1 (6:6) aspect ratio for product images
               child: Stack(
                 children: [
                   ClipRRect(
                     borderRadius: const BorderRadius.vertical(
                       top: Radius.circular(12),
                     ),
-                    child: product.primaryThumbnailUrl.isNotEmpty
-                        ? Image.network(
-                            product.primaryThumbnailUrl,
-                            width: double.infinity,
-                            height: double.infinity,
-                            fit: BoxFit.cover,
-                            cacheWidth: 400,
-                            cacheHeight: 400, // Square cache dimensions for 1:1 ratio
-                            errorBuilder: (context, error, stackTrace) {
-                              return _buildPlaceholderImage();
-                            },
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return _buildPlaceholderImage();
-                            },
-                          )
-                        : _buildPlaceholderImage(),
+                    child:
+                        product.primaryThumbnailUrl.isNotEmpty
+                            ? Image.network(
+                              product.primaryThumbnailUrl,
+                              width: double.infinity,
+                              height: double.infinity,
+                              fit: BoxFit.cover,
+                              cacheWidth: 400,
+                              cacheHeight:
+                                  400, // Square cache dimensions for 1:1 ratio
+                              errorBuilder: (context, error, stackTrace) {
+                                return _buildPlaceholderImage();
+                              },
+                              loadingBuilder: (
+                                context,
+                                child,
+                                loadingProgress,
+                              ) {
+                                if (loadingProgress == null) return child;
+                                return _buildPlaceholderImage();
+                              },
+                            )
+                            : _buildPlaceholderImage(),
                   ),
-                  
+
                   // Flash Sale Badge
                   if (product.flashSale.isCurrentlyActive)
                     Positioned(
@@ -1402,12 +1474,13 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                  
+
                   // Heart Icon (User-friendly with background)
                   Positioned(
                     top: 6,
                     right: 6,
                     child: Container(
+                      padding: const EdgeInsets.all(4),
                       decoration: BoxDecoration(
                         color: Colors.white.withOpacity(0.9),
                         borderRadius: BorderRadius.circular(16),
@@ -1421,14 +1494,14 @@ class HomeScreen extends StatelessWidget {
                       ),
                       child: WishlistHeartIcon(
                         productId: product.id,
-                        iconSize: 20,
+                        iconSize: 16,
                       ),
                     ),
                   ),
                 ],
               ),
             ),
-            
+
             // Product Info - Optimized for space with minimal padding
             Padding(
               padding: const EdgeInsets.all(8), // Consistent spacing
@@ -1449,22 +1522,20 @@ class HomeScreen extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  
+
                   // Brand (if available)
                   if (product.brand.isNotEmpty) ...[
                     Text(
                       product.brand,
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: Colors.grey[600],
-                      ),
+                      style: TextStyle(fontSize: 10, color: Colors.grey[600]),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],
-                  
+
                   // Description optional - only show if there's space
-                  if (product.description.isNotEmpty && product.brand.isEmpty) ...[
+                  if (product.description.isNotEmpty &&
+                      product.brand.isEmpty) ...[
                     const SizedBox(height: 8), // Consistent spacing
                     Text(
                       product.description,
@@ -1479,9 +1550,8 @@ class HomeScreen extends StatelessWidget {
                   ],
 
                   const SizedBox(height: 8), // Consistent spacing
-
                   // Price Section with Flash Sale Support
-                  if (product.flashSale.isCurrentlyActive && 
+                  if (product.flashSale.isCurrentlyActive &&
                       product.flashSale.discountPrice != null) ...[
                     // Flash Sale Price
                     Row(
@@ -1523,9 +1593,8 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                   ],
-                  
+
                   const SizedBox(height: 2), // Minimal spacing
-                  
                   // Reviews (Rating) - Even more compact display
                   Row(
                     mainAxisSize: MainAxisSize.min,
@@ -1534,9 +1603,10 @@ class HomeScreen extends StatelessWidget {
                         return Icon(
                           Icons.star,
                           size: 10,
-                          color: index < product.rating.filledStars 
-                              ? Colors.amber 
-                              : Colors.grey[300],
+                          color:
+                              index < product.rating.filledStars
+                                  ? Colors.amber
+                                  : Colors.grey[300],
                         );
                       }),
                       const SizedBox(width: 3),
@@ -1567,11 +1637,7 @@ class HomeScreen extends StatelessWidget {
       height: double.infinity,
       color: Colors.grey[200],
       child: Center(
-        child: Icon(
-          Icons.image,
-          color: Colors.grey[400],
-          size: 40,
-        ),
+        child: Icon(Icons.image, color: Colors.grey[400], size: 40),
       ),
     );
   }
@@ -1583,7 +1649,8 @@ class HomeScreen extends StatelessWidget {
     }
     final originalPrice = product.price;
     final discountPrice = product.flashSale.discountPrice!;
-    final discount = ((originalPrice - discountPrice) / originalPrice * 100).round();
+    final discount =
+        ((originalPrice - discountPrice) / originalPrice * 100).round();
     return discount > 0 ? discount : 0;
   }
 
@@ -1602,9 +1669,7 @@ class HomeScreen extends StatelessWidget {
               color: Colors.grey[100],
               borderRadius: BorderRadius.circular(8),
             ),
-            child: const Center(
-              child: CircularProgressIndicator(),
-            ),
+            child: const Center(child: CircularProgressIndicator()),
           );
         },
       ),
@@ -1631,11 +1696,11 @@ class HomeScreen extends StatelessWidget {
             ),
           );
         }
-        
+
         if (shoppingController.offers.isEmpty) {
           return const SizedBox.shrink();
         }
-        
+
         return OffersWidget(
           offers: shoppingController.offers,
           isLoading: false.obs,
@@ -1648,7 +1713,9 @@ class HomeScreen extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       // The Container will expand to fit its content
-      constraints: const BoxConstraints(minHeight: 500), // Increased from 400 to 600
+      constraints: const BoxConstraints(
+        minHeight: 500,
+      ), // Increased from 400 to 600
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1656,7 +1723,10 @@ class HomeScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: AppColors.primaryColor,
                   borderRadius: BorderRadius.circular(12),
@@ -1677,45 +1747,47 @@ class HomeScreen extends StatelessWidget {
             if (shoppingController.isLoadingAllProducts.value) {
               return _buildAllProductsLoadingGrid();
             }
-            
+
             if (shoppingController.allProducts.isEmpty) {
               return const Padding(
                 padding: EdgeInsets.all(32.0),
                 child: Center(
                   child: Text(
                     'No products available',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey,
-                    ),
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
                   ),
                 ),
               );
             }
-            
+
             return Container(
-              constraints: const BoxConstraints(minHeight: 400), // Increased from 300 to 500
+              constraints: const BoxConstraints(
+                minHeight: 400,
+              ), // Increased from 300 to 500
               child: GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 padding: const EdgeInsets.all(0),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  childAspectRatio: 0.58, // Adjusted for square (1:1) image aspect ratio
+                  childAspectRatio:
+                      0.58, // Adjusted for square (1:1) image aspect ratio
                   crossAxisSpacing: 8,
-                  mainAxisSpacing: 14, // Increased spacing between rows for better separation
+                  mainAxisSpacing:
+                      14, // Increased spacing between rows for better separation
                 ),
-              itemCount: shoppingController.allProducts.length + 
-                         (shoppingController.hasMoreAllProducts.value ? 1 : 0),
-              itemBuilder: (context, index) {
-                if (index == shoppingController.allProducts.length) {
-                  return _buildLoadMoreIndicator();
-                }
-                
-                final product = shoppingController.allProducts[index];
-                return _buildAllProductsGridCard(product);
-              },
-            ),
+                itemCount:
+                    shoppingController.allProducts.length +
+                    (shoppingController.hasMoreAllProducts.value ? 1 : 0),
+                itemBuilder: (context, index) {
+                  if (index == shoppingController.allProducts.length) {
+                    return _buildLoadMoreIndicator();
+                  }
+
+                  final product = shoppingController.allProducts[index];
+                  return _buildAllProductsGridCard(product);
+                },
+              ),
             );
           }),
         ],
@@ -1741,9 +1813,7 @@ class HomeScreen extends StatelessWidget {
             color: Colors.grey[100],
             borderRadius: BorderRadius.circular(8),
           ),
-          child: const Center(
-            child: CircularProgressIndicator(),
-          ),
+          child: const Center(child: CircularProgressIndicator()),
         );
       },
     );
@@ -1757,12 +1827,10 @@ class HomeScreen extends StatelessWidget {
             color: Colors.grey[100],
             borderRadius: BorderRadius.circular(8),
           ),
-          child: const Center(
-            child: CircularProgressIndicator(),
-          ),
+          child: const Center(child: CircularProgressIndicator()),
         );
       }
-      
+
       return Container(
         decoration: BoxDecoration(
           color: Colors.blue[50],
@@ -1783,10 +1851,7 @@ class HomeScreen extends StatelessWidget {
   Widget _buildAllProductsGridCard(ProductData product) {
     return GestureDetector(
       onTap: () {
-        Get.toNamed(
-          Routes.productDetail,
-          arguments: {'productId': product.id},
-        );
+        Get.toNamed(Routes.productDetail, arguments: {'productId': product.id});
       },
       child: Container(
         decoration: BoxDecoration(
@@ -1815,65 +1880,69 @@ class HomeScreen extends StatelessWidget {
                       topLeft: Radius.circular(8),
                       topRight: Radius.circular(8),
                     ),
-                    child: product.primaryThumbnailUrl.isNotEmpty
-                        ? Image.network(
-                            product.primaryThumbnailUrl,
-                            width: double.infinity,
-                            height: double.infinity,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return _buildPlaceholderImage();
-                            },
-                          )
-                        : _buildPlaceholderImage(),
+                    child:
+                        product.primaryThumbnailUrl.isNotEmpty
+                            ? Image.network(
+                              product.primaryThumbnailUrl,
+                              width: double.infinity,
+                              height: double.infinity,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return _buildPlaceholderImage();
+                              },
+                            )
+                            : _buildPlaceholderImage(),
                   ),
-                // Heart Icon
-                Positioned(
-                  top: 4,
-                  right: 4,
-                  child: WishlistHeartIcon(
-                    productId: product.id,
-                    iconSize: 16,
-                  ),
-                ),
-                // Flash Sale Badge
-                if (product.flashSale.isCurrentlyActive)
+                  // Heart Icon
                   Positioned(
                     top: 4,
-                    left: 4,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [Colors.red, Colors.redAccent],
-                        ),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(
-                            Icons.local_fire_department,
-                            color: Colors.white,
-                            size: 8,
-                          ),
-                          const SizedBox(width: 2),
-                          Text(
-                            '-${product.flashSale.getDiscountPercentage(product.price).toInt()}%',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 8,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
+                    right: 4,
+                    child: WishlistHeartIcon(
+                      productId: product.id,
+                      iconSize: 16,
                     ),
                   ),
-              ],
+                  // Flash Sale Badge
+                  if (product.flashSale.isCurrentlyActive)
+                    Positioned(
+                      top: 4,
+                      left: 4,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 4,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [Colors.red, Colors.redAccent],
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.local_fire_department,
+                              color: Colors.white,
+                              size: 8,
+                            ),
+                            const SizedBox(width: 2),
+                            Text(
+                              '-${product.flashSale.getDiscountPercentage(product.price).toInt()}%',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 8,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                ],
+              ),
             ),
-            ),
-            
+
             // Product Info - More compact
             Expanded(
               child: Padding(
@@ -1893,21 +1962,18 @@ class HomeScreen extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    
+
                     // Brand
                     if (product.brand.isNotEmpty) ...[
                       const SizedBox(height: 2),
                       Text(
                         product.brand,
-                        style: TextStyle(
-                          fontSize: 9,
-                          color: Colors.grey[600],
-                        ),
+                        style: TextStyle(fontSize: 9, color: Colors.grey[600]),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ],
-                    
+
                     // Description (1 line max to save space)
                     if (product.description.isNotEmpty) ...[
                       const SizedBox(height: 2),
@@ -1922,11 +1988,11 @@ class HomeScreen extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ],
-                    
+
                     const Spacer(),
-                    
+
                     // Price Section
-                    if (product.flashSale.isCurrentlyActive && 
+                    if (product.flashSale.isCurrentlyActive &&
                         product.flashSale.discountPrice != null) ...[
                       // Flash Sale Price
                       Row(
@@ -1973,9 +2039,9 @@ class HomeScreen extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ],
-                    
+
                     const SizedBox(height: 2),
-                    
+
                     // Rating
                     Row(
                       mainAxisSize: MainAxisSize.min,
@@ -1984,9 +2050,10 @@ class HomeScreen extends StatelessWidget {
                           return Icon(
                             Icons.star,
                             size: 8,
-                            color: index < product.rating.filledStars 
-                                ? Colors.amber 
-                                : Colors.grey[300],
+                            color:
+                                index < product.rating.filledStars
+                                    ? Colors.amber
+                                    : Colors.grey[300],
                           );
                         }),
                         const SizedBox(width: 2),
@@ -2011,5 +2078,4 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
-
 }
