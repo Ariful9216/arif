@@ -252,136 +252,22 @@ class ProductDetailScreen extends StatelessWidget {
       );
     }
 
-    return Stack(
+    return Column(
       children: [
-        // Main image viewer
-        SizedBox(
-          height: 350,
-          child: PageView.builder(
-            controller: controller.imagePageController,
-            onPageChanged: controller.onImagePageChanged,
-            itemCount: images.length,
-            itemBuilder: (context, index) {
-              final image = images[index];
-              String imageUrl;
-
-              // Handle both product pictures and variant images
-              if (image is ProductPicture) {
-                imageUrl = image.fullImageUrl;
-              } else if (image is VariantImage) {
-                imageUrl = image.fullImageUrl;
-              } else {
-                imageUrl = '';
-              }
-
-              return Container(
-                color: Colors.grey[50],
-                child: Image.network(
-                  imageUrl,
-                  fit: BoxFit.contain,
-                  width: double.infinity,
-                  height: 350,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      color: Colors.grey[100],
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.broken_image,
-                              size: 64,
-                              color: Colors.grey[400],
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              'Image not available',
-                              style: TextStyle(color: Colors.grey[600]),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return Container(
-                      color: Colors.grey[100],
-                      child: Center(
-                        child: CircularProgressIndicator(
-                          value:
-                              loadingProgress.expectedTotalBytes != null
-                                  ? loadingProgress.cumulativeBytesLoaded /
-                                      loadingProgress.expectedTotalBytes!
-                                  : null,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            AppColors.primaryColor,
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              );
-            },
-          ),
-        ),
-
-        // Flash Sale Badge
-        if (product.flashSale.isCurrentlyActive)
-          Positioned(
-            top: 16,
-            left: 16,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Colors.red, Colors.redAccent],
-                ),
-                borderRadius: BorderRadius.circular(8),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.red.withOpacity(0.3),
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Text(
-                '-${product.flashSale.getDiscountPercentage(product.price).toInt()}%',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-
-        Positioned(
-          top: 16,
-          right: 16,
-          child: Column(
-            children: [
-              // Flash Sale Timer
-              if (product.flashSale.isCurrentlyActive)
-                FlashSaleTimer(
-                  flashSale: product.flashSale,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 10,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  backgroundColor: Colors.black.withOpacity(0.7),
-                ),
-
-              // Download button
-              GestureDetector(
-                onTap: () {
-                  final currentIndex = controller.currentImageIndex.value;
-                  final image = images[currentIndex];
+        Stack(
+          children: [
+            // Main image viewer
+            SizedBox(
+              height: 350,
+              child: PageView.builder(
+                controller: controller.imagePageController,
+                onPageChanged: controller.onImagePageChanged,
+                itemCount: images.length,
+                itemBuilder: (context, index) {
+                  final image = images[index];
                   String imageUrl;
 
+                  // Handle both product pictures and variant images
                   if (image is ProductPicture) {
                     imageUrl = image.fullImageUrl;
                   } else if (image is VariantImage) {
@@ -390,63 +276,257 @@ class ProductDetailScreen extends StatelessWidget {
                     imageUrl = '';
                   }
 
-                  if (imageUrl.isEmpty) {
-                    return;
-                  }
-
-                  controller.downloadImage(imageUrl, currentIndex);
+                  return Container(
+                    color: Colors.grey[50],
+                    child: Image.network(
+                      imageUrl,
+                      fit: BoxFit.contain,
+                      width: double.infinity,
+                      height: 350,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          color: Colors.grey[100],
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.broken_image,
+                                  size: 64,
+                                  color: Colors.grey[400],
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  'Image not available',
+                                  style: TextStyle(color: Colors.grey[600]),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Container(
+                          color: Colors.grey[100],
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              value:
+                                  loadingProgress.expectedTotalBytes != null
+                                      ? loadingProgress.cumulativeBytesLoaded /
+                                          loadingProgress.expectedTotalBytes!
+                                      : null,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                AppColors.primaryColor,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  );
                 },
-                child: Container(
-                  margin: const EdgeInsets.only(top: 12),
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.7),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Icon(Icons.download, color: Colors.white, size: 24),
-                ),
               ),
-            ],
-          ),
-        ),
+            ),
 
-        // Image indicators (if multiple images)
-        if (images.length > 1)
-          Positioned(
-            bottom: 16,
-            left: 0,
-            right: 0,
-            child: Obx(
-              () => Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(
-                  images.length,
-                  (index) => Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 3),
-                    width: controller.currentImageIndex.value == index ? 24 : 8,
-                    height: 8,
-                    decoration: BoxDecoration(
-                      color:
-                          controller.currentImageIndex.value == index
-                              ? AppColors.primaryColor
-                              : Colors.white.withOpacity(0.5),
-                      borderRadius: BorderRadius.circular(4),
+            // Flash Sale Badge
+            if (product.flashSale.isCurrentlyActive)
+              Positioned(
+                top: 16,
+                left: 16,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [Colors.red, Colors.redAccent],
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.red.withOpacity(0.3),
+                        blurRadius: 4,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Text(
+                    '-${product.flashSale.getDiscountPercentage(product.price).toInt()}%',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
               ),
-            ),
-          ),
 
-        // Thumbnail strip (if multiple images)
+            Positioned(
+              top: 16,
+              right: 16,
+              child: Column(
+                children: [
+                  // Flash Sale Timer
+                  if (product.flashSale.isCurrentlyActive)
+                    FlashSaleTimer(
+                      flashSale: product.flashSale,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      backgroundColor: Colors.black.withOpacity(0.7),
+                    ),
+
+                  // Download button
+                  GestureDetector(
+                    onTap: () {
+                      final currentIndex = controller.currentImageIndex.value;
+                      final image = images[currentIndex];
+                      String imageUrl;
+
+                      if (image is ProductPicture) {
+                        imageUrl = image.fullImageUrl;
+                      } else if (image is VariantImage) {
+                        imageUrl = image.fullImageUrl;
+                      } else {
+                        imageUrl = '';
+                      }
+
+                      if (imageUrl.isEmpty) {
+                        return;
+                      }
+
+                      controller.downloadImage(imageUrl, currentIndex);
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(top: 12),
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.withOpacity(0.7),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(
+                        Icons.download,
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Image indicators (if multiple images)
+            // if (images.length > 1)
+            //   Positioned(
+            //     bottom: 16,
+            //     left: 0,
+            //     right: 0,
+            //     child: Obx(
+            //       () => Row(
+            //         mainAxisAlignment: MainAxisAlignment.center,
+            //         children: List.generate(
+            //           images.length,
+            //           (index) => Container(
+            //             margin: const EdgeInsets.symmetric(horizontal: 3),
+            //             width:
+            //                 controller.currentImageIndex.value == index
+            //                     ? 24
+            //                     : 8,
+            //             height: 8,
+            //             decoration: BoxDecoration(
+            //               color:
+            //                   controller.currentImageIndex.value == index
+            //                       ? AppColors.primaryColor
+            //                       : Colors.white.withOpacity(0.5),
+            //               borderRadius: BorderRadius.circular(4),
+            //             ),
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+
+            // Thumbnail strip (if multiple images)
+            // if (images.length > 1)
+            //   Positioned(
+            //     bottom: 40,
+            //     left: 16,
+            //     right: 16,
+            //     child: SizedBox(
+            //       height: 60,
+            //       child: ListView.builder(
+            //         scrollDirection: Axis.horizontal,
+            //         itemCount: images.length,
+            //         itemBuilder: (context, index) {
+            //           final image = images[index];
+            //           String thumbnailUrl;
+
+            //           // Handle both product pictures and variant images
+            //           if (image is ProductPicture) {
+            //             thumbnailUrl = image.fullThumbnailUrl;
+            //           } else if (image is VariantImage) {
+            //             thumbnailUrl =
+            //                 image
+            //                     .fullImageUrl; // Variants don't have separate thumbnails
+            //           } else {
+            //             thumbnailUrl = '';
+            //           }
+
+            //           return Obx(
+            //             () => GestureDetector(
+            //               onTap: () => controller.goToImage(index),
+            //               child: Container(
+            //                 width: 60,
+            //                 height: 60,
+            //                 margin: const EdgeInsets.only(right: 8),
+            //                 decoration: BoxDecoration(
+            //                   border: Border.all(
+            //                     color:
+            //                         controller.currentImageIndex.value == index
+            //                             ? AppColors.primaryColor
+            //                             : Colors.grey[300]!,
+            //                     width: 2,
+            //                   ),
+            //                   borderRadius: BorderRadius.circular(8),
+            //                 ),
+            //                 child: ClipRRect(
+            //                   borderRadius: BorderRadius.circular(6),
+            //                   child: Image.network(
+            //                     thumbnailUrl,
+            //                     fit: BoxFit.cover,
+            //                     errorBuilder: (context, error, stackTrace) {
+            //                       return Container(
+            //                         color: Colors.grey[200],
+            //                         child: Icon(
+            //                           Icons.image,
+            //                           color: Colors.grey[400],
+            //                           size: 20,
+            //                         ),
+            //                       );
+            //                     },
+            //                   ),
+            //                 ),
+            //               ),
+            //             ),
+            //           );
+            //         },
+            //       ),
+            //     ),
+            //   ),
+          ],
+        ),
+
         if (images.length > 1)
-          Positioned(
-            bottom: 40,
-            left: 16,
-            right: 16,
+          Padding(
+            padding: const EdgeInsets.only(top: 12),
             child: SizedBox(
               height: 60,
               child: ListView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 scrollDirection: Axis.horizontal,
                 itemCount: images.length,
                 itemBuilder: (context, index) {
